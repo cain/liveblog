@@ -1,5 +1,33 @@
 # Changelog
 
+## 1.8.2
+
+* Fix issue with time format (#424)
+* Adds check around the jetpack is_mobile flag (#428)
+* Restore current user back in to localised scripts (#430)
+* Cast liveblog rewrite version before checks (#439)
+
+props [justnorris](https://github.com/justnorris), [mjangda](https://github.com/mjangda), [paulschreiber](https://github.com/paulschreiber), [scottblackburn](https://github.com/scottblackburn)
+
+## 1.8.1
+
+* Fix bug with changing contributors
+* Fix multiple PHP Coding Standards issues
+
+props [paulschreiber](https://github.com/paulschreiber)
+
+## 1.8
+
+* New: Allow multiple authors for each Liveblog entry
+* New: Entries no longer have to have an author
+* New: Share entries with entry-specific permalinks
+* New: Media library integration in the entry editor
+* New: Edit entry HTML within the editor
+* Fixed: Bug with some installs using the correct REST API base URL
+* Fixed: Various coding standards issues
+
+props [jasonagnew](https://github.com/), [liam-defty](https://github.com/liam-defty), [paulschreiber](https://github.com/paulschreiber), [philipjohn](https://github.com/philipjohn), [sboisvert](https://github.com/sboisvert)
+
 ## 1.7.1
 
 * Fix bug with REST endpoints in Multisite (props justnorris)

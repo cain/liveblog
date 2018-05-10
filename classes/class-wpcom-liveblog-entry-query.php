@@ -42,10 +42,10 @@ class WPCOM_Liveblog_Entry_Query {
 	 */
 	public function get_all_edits( $args = array() ) {
 		$defaults = array(
-			'orderby' 	=> 'comment_date_gmt',
-			'order'   	=> 'ASC',
-			'meta_key'  => 'liveblog_replaces',
-			'status'	=> 'liveblog'
+			'orderby'  => 'comment_date_gmt',
+			'order'    => 'ASC',
+			'meta_key' => 'liveblog_replaces',
+			'status'   => 'liveblog',
 		);
 
 		$args     = wp_parse_args( $args, $defaults );
@@ -81,7 +81,13 @@ class WPCOM_Liveblog_Entry_Query {
 
 	public function get_by_id( $id ) {
 		$comment = get_comment( $id );
-		if ( $comment->comment_post_ID != $this->post_id || $comment->comment_type != $this->key || $comment->comment_approved != $this->key) {
+		/*
+		 * When running tests, WP_Comment's comment_ID and comment_post_ID return strings. However, post_id
+		 * returns a string (test_update_should_update_original_entry) or
+		 * an integer (test_get_by_id_should_return_the_entry). For this to pass, coerce comment_post_ID to
+		 * an integer before using a strict comparison.
+		 */
+		if ( intval( $comment->comment_post_ID ) !== intval( $this->post_id ) || $comment->comment_type !== $this->key || $comment->comment_approved !== $this->key ) {
 			return null;
 		}
 		$entries = self::entries_from_comments( array( $comment ) );
@@ -92,8 +98,9 @@ class WPCOM_Liveblog_Entry_Query {
 
 		$entries = $this->get( array( 'number' => 1 ) );
 
-		if ( empty( $entries ) )
+		if ( empty( $entries ) ) {
 			return null;
+		}
 
 		return reset( $entries );
 	}
@@ -166,12 +173,12 @@ class WPCOM_Liveblog_Entry_Query {
 	}
 
 	public function has_any() {
-		return (bool)$this->get();
+		return (bool) $this->get();
 	}
 
 	public function get_all_entries_asc() {
-		$cached_entries_asc_key =  $this->key . '_entries_asc_' . $this->post_id;
-		$cached_entries_asc = wp_cache_get( $cached_entries_asc_key, 'liveblog' );
+		$cached_entries_asc_key = $this->key . '_entries_asc_' . $this->post_id;
+		$cached_entries_asc     = wp_cache_get( $cached_entries_asc_key, 'liveblog' );
 		if ( false !== $cached_entries_asc ) {
 			return $cached_entries_asc;
 		}
@@ -182,8 +189,9 @@ class WPCOM_Liveblog_Entry_Query {
 
 	public static function entries_from_comments( $comments = array() ) {
 
-		if ( empty( $comments ) )
+		if ( empty( $comments ) ) {
 			return null;
+		}
 
 		return array_map( array( 'WPCOM_Liveblog_Entry', 'from_comment' ), $comments );
 	}
@@ -213,8 +221,9 @@ class WPCOM_Liveblog_Entry_Query {
 	public static function assoc_array_by_id( $entries ) {
 		$result = array();
 
-		foreach ( (array) $entries as $entry )
-			$result[$entry->get_id()] = $entry;
+		foreach ( (array) $entries as $entry ) {
+			$result[ $entry->get_id() ] = $entry;
+		}
 
 		return $result;
 	}
