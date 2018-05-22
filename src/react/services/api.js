@@ -19,15 +19,6 @@ export function getEntries(page, config, newestEntry) {
   return ajax(settings);
 }
 
-export function loadMoreEntries(entryId, config) {
-  const settings = {
-    url: `${config.endpoint_url}load-more-entries/${entryId}`,
-    method: 'GET',
-  };
-
-  return ajax(settings);
-}
-
 export function polling(newestEntryTimestamp, config) {
   const timestamp = getCurrentTimestamp() + config.timeDifference;
 
@@ -110,11 +101,15 @@ export function getEvents(config, newestEntry) {
   return ajax(settings);
 }
 
-export function jumpToEvent(id, config, newestEntry) {
+export function jumpToEvent(id, config, newestEntry, isLoadMore) {
   const settings = {
     url: `${config.endpoint_url}jump-to-key-event/${id}/${newestEntry.id || 0}-${newestEntry.timestamp || 0}`,
     method: 'GET',
   };
+
+  if (isLoadMore) {
+    settings.url = `${config.endpoint_url}load-more-entries/${id}`;
+  }
 
   return ajax(settings);
 }

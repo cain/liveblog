@@ -24,7 +24,6 @@ import {
   getEvents,
   deleteEvent,
   jumpToEvent,
-  loadMoreEntries,
 } from '../services/api';
 
 const getEventsEpic = (action$, store) =>
@@ -47,22 +46,8 @@ const deleteEventEpic = (action$, store) =>
 
 const jumpToEventEpic = (action$, store) =>
   action$.ofType(types.JUMP_TO_EVENT)
-    .switchMap(({ payload }) => {
-      if (store.getState().config.paginationType === 'loadMore') {
-        return loadMoreEntries(payload, store.getState().config)
-          .timeout(10000)
-          .flatMap((res) => {
-            if (!res.response.entries.some(x => x.id === payload)) {
-              return of(getEntriesSuccess(res.response));
-            }
-            return concat(
-              of(getEntriesSuccess(res.response)),
-              of(scrollToEntry(`id_${payload}`)),
-            );
-          })
-          .catch(error => of(getEntriesFailed(error)));
-      }
-      return jumpToEvent(payload, store.getState().config, store.getState().api.newestEntry)
+    .switchMap(({ payload }) =>
+      jumpToEvent(payload, store.getState().config, store.getState().api.newestEntry, store.getState().config.paginationType === 'loadMore')
         .timeout(10000)
         .flatMap((res) => {
           if (!res.response.entries.some(x => x.id === payload)) {
@@ -73,8 +58,7 @@ const jumpToEventEpic = (action$, store) =>
             of(scrollToEntry(`id_${payload}`)),
           );
         })
-        .catch(error => of(getEntriesFailed(error)));
-    },
+        .catch(error => of(getEntriesFailed(error))),
     );
 
 export default combineEpics(
