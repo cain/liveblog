@@ -132,7 +132,7 @@ class Media extends Component {
   selectImage(image) {
     const { setEditMode, replaceMetadata, getMetadata } = this.props;
     const { defaultImageSize } = getMetadata();
-    const src = getImageSize(image.media_details.sizes, defaultImageSize);
+    const src = getImageSize(image.media_details, defaultImageSize);
     setEditMode(false);
     this.setState({ ...this.defaultState });
     replaceMetadata({ image: src, edit: false }, true);
