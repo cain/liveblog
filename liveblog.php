@@ -844,6 +844,52 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 		}
 
 		/**
+		 * Get entries for load more
+		 *
+		 * @param int $id entry id
+		 * @return array An array of json encoded results
+		 */
+		public static function load_more_entries( $id = false ) {
+
+			if ( empty( self::$entry_query ) ) {
+				self::$entry_query = new WPCOM_Liveblog_Entry_Query( self::$post_id, self::KEY );
+			}
+
+			$per_page = WPCOM_Liveblog_Lazyloader::get_number_of_entries();
+
+			$entries = self::$entry_query->get_all_entries_asc();
+			$entries = self::flatten_entries( $entries );
+
+			$pages = ceil( count( $entries ) / $per_page );
+
+			//we search for the correct page.
+			if ( false !== $id ) {
+				$index = array_search( $id, array_keys( $entries ) );
+				$index = $index + 1;
+				$page  = ceil( $index / $per_page );
+				$length = $per_page * $page;
+				$entries = array_slice( $entries, 0, $length, true);
+			}
+
+			$entries = self::entries_for_json( $entries );
+
+			$result = array(
+				'entries' => $entries,
+				'page'    => (int) $page,
+				'pages'   => (int) $pages,
+			);
+
+			if ( ! empty( $entries_for_json ) ) {
+				do_action( 'liveblog_entry_request', $result );
+				self::$do_not_cache_response = true;
+			} else {
+				do_action( 'liveblog_entry_request_empty' );
+			}
+
+			return $result;
+		}
+
+		/**
 		 * Convert array of entries to there json response.
 		 * @param type $entries
 		 * @return array

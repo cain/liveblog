@@ -327,6 +327,28 @@ class WPCOM_Liveblog_Rest_Api {
 			)
 		);
 
+		/*
+		 * load more entries for a post
+		 *
+		 *  /<post_id>/load-more-entries/<entry_id>
+		 *
+		 */
+		register_rest_route(
+			self::$api_namespace, '/(?P<post_id>\d+)/load-more-entries/(?P<entry_id>\d+)([/]*)',
+			array(
+				'methods'  => WP_REST_Server::READABLE,
+				'callback' => array( __CLASS__, 'load_more_entries' ),
+				'args'     => array(
+					'post_id'          => array(
+						'required' => true,
+					),
+					'entry_id'             => array(
+						'required' => true,
+					),
+				),
+			)
+		);
+
 	}
 
 	/**
@@ -353,6 +375,30 @@ class WPCOM_Liveblog_Rest_Api {
 
 		return $entries;
 	}
+
+	/**
+	 * load_more_entries based on an entry id
+	 *
+	 * @param WP_REST_Request $request A REST request object
+	 *
+	 * @return array An array of entries
+	 */
+	public static function load_more_entries( WP_REST_Request $request ) {
+
+		// Get required parameters from the request
+		$post_id          = $request->get_param( 'post_id' );
+		$entry_id = $request->get_param( 'entry_id' );
+
+		self::set_liveblog_vars( $post_id );
+
+		$entries = WPCOM_Liveblog::load_more_entries( $entry_id );
+
+		// Possibly do not cache the response
+		WPCOM_Liveblog::prevent_caching_if_needed();
+
+		return $entries;
+	}
+
 
 	/**
 	 * Perform a specific CRUD action on an entry

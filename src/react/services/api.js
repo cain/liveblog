@@ -19,6 +19,15 @@ export function getEntries(page, config, newestEntry) {
   return ajax(settings);
 }
 
+export function loadMoreEntries(entryId, config) {
+  const settings = {
+    url: `${config.endpoint_url}load-more-entries/${entryId}`,
+    method: 'GET',
+  };
+
+  return ajax(settings);
+}
+
 export function polling(newestEntryTimestamp, config) {
   const timestamp = getCurrentTimestamp() + config.timeDifference;
 
