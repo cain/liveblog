@@ -826,14 +826,15 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 			}
 
 			$offset  = $per_page * ( $page - 1 );
+			$number_of_entries = $per_page;
 
 			//if $is_load_more is true, load all entries prior to the given entry
 			if ( true === $is_load_more && false !== $id && isset( $page ) ) {
 				$offset  = 0;
-				$per_page = $per_page * $page;
+				$number_of_entries = $per_page * $page;
 			}
 
-			$entries = array_slice( $entries, $offset, $per_page );
+			$entries = array_slice( $entries, $offset, $number_of_entries );
 			$entries = self::entries_for_json( $entries );
 
 			$result = array(
