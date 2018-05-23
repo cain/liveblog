@@ -8,11 +8,12 @@ import * as userActions from '../actions/userActions';
 class PaginationContainer extends Component {
   render() {
     const { page, pages, getEntriesPaginated, paginationType } = this.props;
+    const isLastPage = page === pages;
 
     if (paginationType === 'loadMore') {
       return (
         <div className="liveblog-pagination">
-          {page !== pages &&
+          {!isLastPage &&
           <button
             className="liveblog-btn liveblog-pagination-btn liveblog-pagination-next"
             onClick={() => getEntriesPaginated(page + 1)}
@@ -43,14 +44,14 @@ class PaginationContainer extends Component {
         <span className="liveblog-pagination-pages">{page} of {pages}</span>
         <div>
           <button
-            disabled={page === pages}
+            disabled={isLastPage}
             className="liveblog-btn liveblog-pagination-btn liveblog-pagination-next"
             onClick={() => getEntriesPaginated((page + 1), 'first')}
           >
             Next
           </button>
           <button
-            disabled={page === pages}
+            disabled={isLastPage}
             className="liveblog-btn liveblog-pagination-btn liveblog-pagination-last"
             onClick={() => getEntriesPaginated(pages, 'first')}
           >

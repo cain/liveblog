@@ -792,9 +792,10 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 		 * @param int $page Requested Page.
 		 * @param string $last_know_entry id-timestamp of the last rendered entry.
 		 * @param int $id entry id
+		 * @param bool $is_load_more
 		 * @return array An array of json encoded results
 		 */
-		public static function get_entries_paged( $page, $last_known_entry = false, $id = false ) {
+		public static function get_entries_paged( $page, $last_known_entry = false, $id = false, $is_load_more = false ) {
 
 			if ( empty( self::$entry_query ) ) {
 				self::$entry_query = new WPCOM_Liveblog_Entry_Query( self::$post_id, self::KEY );
@@ -822,55 +823,17 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 				$index = $index + 1;
 				$page  = ceil( $index / $per_page );
 			}
-
+			
 			$offset  = $per_page * ( $page - 1 );
-			$entries = array_slice( $entries, $offset, $per_page );
-			$entries = self::entries_for_json( $entries );
+			$number_of_entries = $per_page;
 
-			$result = array(
-				'entries' => $entries,
-				'page'    => (int) $page,
-				'pages'   => (int) $pages,
-			);
-
-			if ( ! empty( $entries_for_json ) ) {
-				do_action( 'liveblog_entry_request', $result );
-				self::$do_not_cache_response = true;
-			} else {
-				do_action( 'liveblog_entry_request_empty' );
+			//if $is_load_more is true, load all entries prior to the given entry
+			if ( true === $is_load_more && false !== $id && isset( $page ) ) {
+				$offset  = 0;
+				$number_of_entries = $per_page * $page;
 			}
 
-			return $result;
-		}
-
-		/**
-		 * Get entries for load more
-		 *
-		 * @param int $id entry id
-		 * @return array An array of json encoded results
-		 */
-		public static function load_more_entries( $id = false ) {
-
-			if ( empty( self::$entry_query ) ) {
-				self::$entry_query = new WPCOM_Liveblog_Entry_Query( self::$post_id, self::KEY );
-			}
-
-			$per_page = WPCOM_Liveblog_Lazyloader::get_number_of_entries();
-
-			$entries = self::$entry_query->get_all_entries_asc();
-			$entries = self::flatten_entries( $entries );
-
-			$pages = ceil( count( $entries ) / $per_page );
-
-			//we search for the correct page.
-			if ( false !== $id ) {
-				$index = array_search( $id, array_keys( $entries ) );
-				$index = $index + 1;
-				$page  = ceil( $index / $per_page );
-				$length = $per_page * $page;
-				$entries = array_slice( $entries, 0, $length, true);
-			}
-
+			$entries = array_slice( $entries, $offset, $number_of_entries );
 			$entries = self::entries_for_json( $entries );
 
 			$result = array(

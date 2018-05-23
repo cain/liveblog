@@ -391,7 +391,7 @@ class WPCOM_Liveblog_Rest_Api {
 
 		self::set_liveblog_vars( $post_id );
 
-		$entries = WPCOM_Liveblog::load_more_entries( $entry_id );
+		$entries = WPCOM_Liveblog::get_entries_paged( false, false, $entry_id, true );
 
 		// Possibly do not cache the response
 		WPCOM_Liveblog::prevent_caching_if_needed();
