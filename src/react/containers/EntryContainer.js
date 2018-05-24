@@ -7,6 +7,7 @@ import * as apiActions from '../actions/apiActions';
 import * as userActions from '../actions/userActions';
 import { triggerOembedLoad, timeAgo, formattedTime } from '../utils/utils';
 import EditorContainer from '../containers/EditorContainer';
+import EntryShare from '../components/EntryShare';
 
 class EntryContainer extends Component {
   constructor(props) {
@@ -112,6 +113,7 @@ class EntryContainer extends Component {
               )
           }
           {this.entryActions()}
+          <EntryShare entry={entry} />
         </div>
       </article>
     );
