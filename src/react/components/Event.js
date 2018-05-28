@@ -6,7 +6,7 @@ const Event = ({ event, click, utcOffset, dateFormat, shouldDivide }) => (
   <React.Fragment>
     <li className="liveblog-event">
       <div className="liveblog-event-body">
-        <div className="liveblog-event-meta" >
+        <div className="liveblog-event-meta">
           {simpleFormatTime(event.entry_time, utcOffset, 'h:m a')}
         </div>
         <div>
@@ -32,7 +32,7 @@ Event.propTypes = {
   canEdit: PropTypes.bool,
   utcOffset: PropTypes.string,
   dateFormat: PropTypes.string,
-  shouldDivide: PropTypes.boolean,
+  shouldDivide: PropTypes.bool,
 };
 
 export default Event;

@@ -1,3 +1,7 @@
+.liveblog-events {
+  margin-bottom: 0px;
+}
+
 .liveblog-event {
   position: relative;
   display: inline-block;
@@ -30,5 +34,40 @@
     content: '';
     position: absolute;
     height: 1px !important;
+  }
+}
+.liveblog-events-expand {
+  position: relative;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
+  &-button {
+    width: 32px;
+    height: 32px;
+    padding: 0px;
+    border-radius: 50%;
+    border: 2px solid #0570E7;
+    z-index: 2;
+    background: #fff;
+    position: absolute;
+    outline: none;
+    &:hover, &:focus {
+      background: #fff;
+    }
+  
+    &.expand-up {
+      svg {
+        transform: rotate(180deg);
+      }
+    }
+  }
+  .expand-line {
+    width: 100%;
+    background: #D8D8D8;
+    height: 1px;
+    left: 0;
+    top: 15px;
   }
 }

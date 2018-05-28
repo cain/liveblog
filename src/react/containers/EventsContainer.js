@@ -8,30 +8,46 @@ import { connect } from 'react-redux';
 import * as eventsActions from '../actions/eventsActions';
 
 import Event from '../components/Event';
-import { daysAgo, formattedTime } from '../utils/utils';
+import { daysAgo } from '../utils/utils';
 
 class EventsContainer extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      expand: false,
+    };
+  }
+
+  parseEvents(events) {
+    if (this.state.expand) {
+      return events;
+    }
+    return events.slice(0, 3);
+  }
+
+  toggleExpand() {
+    this.setState({ expand: !this.state.expand });
+  }
+
   renderEvents() {
     const { deleteEvent, jumpToEvent, canEdit, utcOffset, dateFormat } = this.props;
+    const { expand } = this.state;
 
     const events = Object.values(this.props.events);
+    const canExpand = events.length > 3;
 
     const shouldDivide = (event, i) =>
       event &&
-      (events.length - 1 === i ||
+      ((this.parseEvents(events).length - 1) === i ||
       daysAgo(event.entry_time, utcOffset) !==
-      daysAgo(events[i + 1].entry_time, utcOffset));
+      daysAgo(this.parseEvents(events)[i + 1].entry_time, utcOffset));
 
     return (
       <div>
         <h2 className="widget-title">Key Events</h2>
         <ul className="liveblog-events">
-          {events.length &&
-            <li className="liveblog-event liveblog-event-body-divider">
-              {formattedTime(events[0].entry_time, utcOffset, dateFormat)}
-            </li>
-          }
-          {events.map((event, i) =>
+          {this.parseEvents(events).map((event, i) =>
             <Event
               key={i}
               event={event}
@@ -44,6 +60,22 @@ class EventsContainer extends Component {
             />,
           )}
         </ul>
+        {canExpand && <div className="liveblog-events-expand">
+          <button
+            className={`liveblog-events-expand-button ${expand ? 'expand-up' : 'expand-down'}`}
+            onClick={() => this.toggleExpand()}>
+            <svg width="20" height="10" viewBox="0 0 17.5 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M8.0002 5.34055L1.65775 0L0 1.61151L8.0002 8.56357L16
+                1.61151L14.3427 0L8.0002 5.34055Z"
+                transform="translate(0.718262 0.718262)"
+                fill="#0570E7"/>
+            </svg>
+          </button>
+          <div className="expand-line"></div>
+        </div>}
       </div>
     );
   }

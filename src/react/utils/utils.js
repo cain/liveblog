@@ -169,10 +169,8 @@ export const getPollingPages = (current, next) => {
  * @param {Number} timestamp
  * @return {String} utcOffset Utc Offset from server
  */
-/* eslint-disable */
-export const simpleFormatTime = (timestamp, utcOffset, timeFormat) => {
-  return moment.unix(timestamp).utcOffset(utcOffset, false).format(timeFormat);
-};
+export const simpleFormatTime = (timestamp, utcOffset, timeFormat) =>
+  moment.unix(timestamp).utcOffset(utcOffset, false).format(timeFormat);
 
 /**
  * Fires of any oembed triggers need and adds an event listener that
