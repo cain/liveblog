@@ -73,7 +73,7 @@ const EntryShare = ({ entry }) => {
   return (
     <div className="liveblog-share" id={`liveblog-update-${entry.id}-share`}>
       <button className="share-social share-facebook " onClick={shareFacebook}>
-        <span data-no-canvas="false" className="tge-svg-icon tge-svg-icon_social-facebook_circle_outline">
+        <span data-no-canvas="false">
           <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><title>social-facebook_circle</title>
             <g fill="#3A5795" fillRule="evenodd">
               <path d="M16 32C7.162 32 0 24.838 0 16 0 7.162 7.162 0 16 0c8.838 0 16 7.162 16 16 0 8.838-7.162 16-16 16zm0-2.594c7.405 0 13.406-6 13.406-13.406 0-7.405-6-13.406-13.406-13.406-7.405 0-13.406 6-13.406 13.406 0 7.405 6 13.406 13.406 13.406z" fillRule="nonzero"></path>
@@ -83,7 +83,7 @@ const EntryShare = ({ entry }) => {
         </span>
       </button>
       <button className="share-social share-twitter " onClick={shareTwitter}>
-        <span data-no-canvas="false" className="tge-svg-icon tge-svg-icon_social-twitter_circle_outline">
+        <span data-no-canvas="false">
           <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><title>social-twitter_circle</title>
             <g fill="#55ACEE" fillRule="evenodd">
               <path d="M16 32C7.162 32 0 24.838 0 16 0 7.162 7.162 0 16 0c8.838 0 16 7.162 16 16 0 8.838-7.162 16-16 16zm0-2.594c7.405 0 13.406-6 13.406-13.406 0-7.405-6-13.406-13.406-13.406-7.405 0-13.406 6-13.406 13.406 0 7.405 6 13.406 13.406 13.406z" fillRule="nonzero"></path>

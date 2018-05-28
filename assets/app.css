@@ -1535,13 +1535,14 @@
 .liveblog-share {
   padding-top: 10px; }
   .liveblog-share .share-social {
-    padding: 5px;
+    padding: 0px;
+    border: none;
     border-radius: 50%;
     height: 35px;
     width: 35px;
     text-align: center;
     background: none;
-    margin-right: 0px; }
+    margin-right: 0.5px; }
     .liveblog-share .share-social .social-icon {
       height: 100%;
       width: 100%;
@@ -1552,5 +1553,3 @@
   @media (max-width: 768px) {
     .liveblog-share .share-email {
       display: none; } }
-
-/*# sourceMappingURL=app.css.map*/
