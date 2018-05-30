@@ -1,5 +1,13 @@
 .DS_Store
 node_modules/
+assets/app.js
+assets/app.js.map
+assets/amp.js
+assets/amp.js.map
+assets/app.css
+assets/app.css.map
+assets/amp.css
+assets/amp.css.map
 dist/
 npm-debug.log
 yarn-error.log
