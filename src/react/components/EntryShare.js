@@ -1,15 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-
 const EntryShare = ({ entry }) => {
   const shareTwitter = (event) => {
     const story = document.querySelector(`.liveblog-entry-class-${entry.id}`);
     const postLink = story.querySelector('.liveblog-meta-time').getAttribute('href');
+    if (!story || !postLink) {
+      return;
+    }
     const postId = entry.id;
     const left = (screen.width / 2) - 300;
     const top = (screen.height / 2) - 175;
-    const options = `width=600,height=350,location=yes,status=yes,top=${top}, left=${left}`;
+    const options = `width=600,height=350,location=yes,status=yes,top=${top},left=${left}`;
     let description = story.querySelector('.liveblog-entry-content').innerText.trim();
 
     event.preventDefault();
@@ -22,51 +24,50 @@ const EntryShare = ({ entry }) => {
     const shareUrl = `https://twitter.com/intent/tweet?text=${text}`;
 
     window.open(shareUrl, postId, options);
-
-    return false;
   };
 
   const shareFacebook = () => {
     const story = document.querySelector(`.liveblog-entry-class-${entry.id}`);
     const postLink = story.querySelector('.liveblog-meta-time').getAttribute('href');
+    if (!story || !postLink) {
+      return;
+    }
     const postId = entry.id;
     const left = (screen.width / 2) - 300;
     const top = (screen.height / 2) - 175;
-    const options = `width=600,height=350,location=yes,status=yes,top=${top}, left=${left}`;
+    const options = `width=600,height=350,location=yes,status=yes,top=${top},left=${left}`;
 
     event.preventDefault();
 
     const shareUrl = `https://www.facebook.com/sharer.php?u=${encodeURIComponent(postLink)}`;
 
     window.open(shareUrl, postId, options);
-
-    return false;
   };
 
   const shareEmail = () => {
     const story = document.querySelector(`.liveblog-entry-class-${entry.id}`);
     const postLink = story.querySelector('.liveblog-meta-time').getAttribute('href');
-
+    if (!story || !postLink) {
+      return;
+    }
     event.preventDefault();
 
-    const shareUrl = `mailto:?subject=title&body=${postLink}`;
+    const shareUrl = `mailto:?subject=${document.title}&body=${postLink}`;
 
     window.open(shareUrl);
-
-    return false;
   };
 
   const shareWhatsapp = () => {
     const story = document.querySelector(`.liveblog-entry-class-${entry.id}`);
     const postLink = story.querySelector('.liveblog-meta-time').getAttribute('href');
-
+    if (!story || !postLink) {
+      return;
+    }
     event.preventDefault();
 
-    const shareUrl = `whatsapp://send?text=${postLink}`;
+    const shareUrl = `whatsapp://send?text=${document.title} ${postLink}`;
 
     window.open(shareUrl);
-
-    return false;
   };
 
   /* eslint max-len: 0 */
