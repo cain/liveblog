@@ -8,24 +8,39 @@ import { connect } from 'react-redux';
 import * as eventsActions from '../actions/eventsActions';
 
 import Event from '../components/Event';
+import { daysAgo, formattedTime } from '../utils/utils';
 
 class EventsContainer extends Component {
   renderEvents() {
-    const { events, deleteEvent, jumpToEvent, canEdit, utcOffset, dateFormat } = this.props;
+    const { deleteEvent, jumpToEvent, canEdit, utcOffset, dateFormat } = this.props;
+
+    const events = Object.values(this.props.events);
+
+    const shouldDivide = (event, i) =>
+      event &&
+      (events.length - 1 === i ||
+      daysAgo(event.entry_time, utcOffset) !==
+      daysAgo(events[i + 1].entry_time, utcOffset));
 
     return (
       <div>
         <h2 className="widget-title">Key Events</h2>
         <ul className="liveblog-events">
-          {Object.keys(events).map((key, i) =>
+          {events.length &&
+            <li className="liveblog-event liveblog-event-body-divider">
+              {formattedTime(events[0].entry_time, utcOffset, dateFormat)}
+            </li>
+          }
+          {events.map((event, i) =>
             <Event
               key={i}
-              event={events[key]}
-              click={() => jumpToEvent(events[key].id)}
-              onDelete={() => deleteEvent(events[key])}
+              event={event}
+              click={() => jumpToEvent(event.id)}
+              onDelete={() => deleteEvent(event)}
               canEdit={canEdit}
               utcOffset={utcOffset}
               dateFormat={dateFormat}
+              shouldDivide={shouldDivide(event, i)}
             />,
           )}
         </ul>

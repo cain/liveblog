@@ -21,3 +21,14 @@
 .liveblog-event .type-key {
   display: none;
 }
+
+.liveblog-event-body-divider {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  &::before {
+    content: '';
+    position: absolute;
+    height: 1px !important;
+  }
+}

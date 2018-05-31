@@ -137,7 +137,7 @@ export const getNewestEntry = (current, update, entries = false) => {
  */
 export const daysAgo = (time, utcOffset) => {
   const currentUTCTime = moment().utcOffset(utcOffset, true);
-  return currentUTCTime.diff(time, 'days');
+  return currentUTCTime.diff(moment.unix(time), 'days');
 };
 
 /**
@@ -162,6 +162,16 @@ export const getCurrentTimestamp = () => Math.floor(Date.now() / 1000);
 export const getPollingPages = (current, next) => {
   if (!next) return current;
   return Math.max(next, 1);
+};
+
+/**
+ * Returns a formated string from timestamp in HH MM format.
+ * @param {Number} timestamp
+ * @return {String} utcOffset Utc Offset from server
+ */
+/* eslint-disable */
+export const simpleFormatTime = (timestamp, utcOffset, timeFormat) => {
+  return moment.unix(timestamp).utcOffset(utcOffset, false).format(timeFormat);
 };
 
 /**
