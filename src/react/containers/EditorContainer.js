@@ -19,6 +19,7 @@ import { getAuthors, getHashtags, uploadImage } from '../services/api';
 import PreviewContainer from './PreviewContainer';
 import AuthorSelectOption from '../components/AuthorSelectOption';
 import HTMLInput from '../components/HTMLInput';
+import PostHeadline from '../components/PostHeadline';
 
 import Editor, { decorators, convertFromHTML, convertToHTML } from '../Editor/index';
 
@@ -58,14 +59,20 @@ class EditorContainer extends Component {
       authors: initialAuthors,
       mode: 'editor',
       readOnly: false,
+      headline: props.entry ? props.entry.headline : '',
       rawText: props.entry ? props.entry.content : '',
       isKeyEvent: keyEvent,
       entryId,
+      lastUpdate: new Date().getTime(),
     };
 
     this.onChange = editorState => this.setState({
       editorState,
       rawText: html(convertToHTML(editorState.getCurrentContent())),
+    });
+
+    this.clearHeadline = () => this.setState({
+      headline: '',
     });
   }
 
@@ -105,6 +112,7 @@ class EditorContainer extends Component {
     const authorIds = authors.map(author => author.id);
     const author = authorIds.length > 0 ? authorIds[0] : false;
     const contributors = authorIds.length > 1 ? authorIds.slice(1, authorIds.length) : false;
+    const headline = this.state.headline;
 
     if (isEditing) {
       updateEntry({
@@ -113,6 +121,7 @@ class EditorContainer extends Component {
         author,
         contributors,
         isKeyEvent,
+        headline,
       });
       entryEditClose(entry.id);
       return;
@@ -123,6 +132,7 @@ class EditorContainer extends Component {
       author,
       contributors,
       isKeyEvent,
+      headline,
     });
 
     const newEditorState = EditorState.push(
@@ -134,12 +144,19 @@ class EditorContainer extends Component {
     this.setState({
       readOnly: false,
       isKeyEvent: false,
+      lastUpdate: new Date().getTime(),
     });
   }
 
   onSelectAuthorChange(value) {
     this.setState({
       authors: value,
+    });
+  }
+
+  onHeadlineChange(value) {
+    this.setState({
+      headline: value,
     });
   }
 
@@ -241,29 +258,36 @@ class EditorContainer extends Component {
       readOnly,
       isKeyEvent,
       entryId,
+      headline,
+      lastUpdate,
     } = this.state;
-
     const { isEditing, config } = this.props;
 
     return (
       <div className="liveblog-editor-container">
         {!isEditing && <h1 className="liveblog-editor-title">Add New Entry</h1>}
+        <PostHeadline
+          onChange={this.onHeadlineChange.bind(this)}
+          headline={headline}
+          lastUpdate={lastUpdate}
+          clearHeadline={this.clearHeadline.bind(this)}
+        />
         <div className="liveblog-editor-tabs">
           <button
             className={`liveblog-editor-tab ${mode === 'editor' ? 'is-active' : ''}`}
-            onClick={() => this.setState({ mode: 'editor' })}
+            onClick={(e) => { e.preventDefault(); this.setState({ mode: 'editor' }); } }
           >
             Visual
           </button>
           <button
             className={`liveblog-editor-tab ${mode === 'raw' ? 'is-active' : ''}`}
-            onClick={() => this.setState({ mode: 'raw' })}
+            onClick={(e) => { e.preventDefault(); this.setState({ mode: 'raw' }); } }
           >
               Text
           </button>
           <button
             className={`liveblog-editor-tab ${mode === 'preview' ? 'is-active' : ''}`}
-            onClick={() => this.setState({ mode: 'preview' })}
+            onClick={(e) => { e.preventDefault(); this.setState({ mode: 'preview' }); } }
           >
               Preview
           </button>
