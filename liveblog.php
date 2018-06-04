@@ -813,9 +813,10 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 		 * @param int $page Requested Page.
 		 * @param string $last_know_entry id-timestamp of the last rendered entry.
 		 * @param int $id entry id
+		 * @param bool $is_load_more
 		 * @return array An array of json encoded results
 		 */
-		public static function get_entries_paged( $page, $last_known_entry = false, $id = false ) {
+		public static function get_entries_paged( $page, $last_known_entry = false, $id = false, $is_load_more = false ) {
 
 			if ( empty( self::$entry_query ) ) {
 				self::$entry_query = new WPCOM_Liveblog_Entry_Query( self::$post_id, self::KEY );
@@ -845,7 +846,15 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 			}
 
 			$offset  = $per_page * ( $page - 1 );
-			$entries = array_slice( $entries, $offset, $per_page );
+			$number_of_entries = $per_page;
+
+			//if $is_load_more is true, load all entries prior to the given entry
+			if ( true === $is_load_more && false !== $id && isset( $page ) ) {
+				$offset  = 0;
+				$number_of_entries = $per_page * $page;
+			}
+
+			$entries = array_slice( $entries, $offset, $number_of_entries );
 			$entries = self::entries_for_json( $entries );
 
 			$result = array(
