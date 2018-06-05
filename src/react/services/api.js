@@ -41,6 +41,7 @@ export function createEntry(entry, config, nonce = false) {
       content: entry.content,
       author_id: entry.author,
       contributor_ids: entry.contributors,
+      headline: entry.headline,
     },
     headers: {
       'Content-Type': 'application/json',
@@ -64,6 +65,7 @@ export function updateEntry(entry, config, nonce = false) {
       author_id: entry.author,
       contributor_ids: entry.contributors,
       is_key_event: entry.isKeyEvent,
+      headline: entry.headline,
     },
     headers: {
       'Content-Type': 'application/json',
