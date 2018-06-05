@@ -7,13 +7,13 @@ const Event = ({ event, click, utcOffset, dateFormat, shouldDivide }) => (
     <li className="liveblog-event">
       <div className="liveblog-event-body">
         <div className="liveblog-event-meta">
-          {simpleFormatTime(event.entry_time, utcOffset, 'h:m a')}
+          {simpleFormatTime(event.entry_time, utcOffset, 'h:mm a')}
         </div>
         <div>
           <span
             className="liveblog-event-content"
             onClick={click}
-            dangerouslySetInnerHTML={{ __html: event.key_event_content }}
+            dangerouslySetInnerHTML={{ __html: event.headline || event.key_event_content }}
           />
         </div>
       </div>

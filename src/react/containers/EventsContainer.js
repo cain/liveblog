@@ -45,7 +45,7 @@ class EventsContainer extends Component {
 
     return (
       <div>
-        <h2 className="widget-title">Key Events</h2>
+        <h2 className="widget-title">Highlights</h2>
         <ul className="liveblog-events">
           {this.parseEvents(events).map((event, i) =>
             <Event
