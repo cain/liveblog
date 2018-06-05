@@ -262,7 +262,7 @@ class EditorContainer extends Component {
       lastUpdate,
     } = this.state;
     const { isEditing, config } = this.props;
-
+    const cantPublish = isKeyEvent && !headline;
     return (
       <div className="liveblog-editor-container">
         {!isEditing && <h1 className="liveblog-editor-title">Add New Entry</h1>}
@@ -314,6 +314,7 @@ class EditorContainer extends Component {
             defaultImageSize={config.default_image_size}
           />
         }
+        {cantPublish && <small className="liveblog-warning">Key events must have a headline</small>}
         <div className="liveblog-metabox-key-events-checkbox">
           <label
             htmlFor={`key-event-checkbox-${entryId}`}
@@ -352,7 +353,10 @@ class EditorContainer extends Component {
           clearable={false}
           cache={false}
         />
-        <button className="liveblog-btn liveblog-publish-btn" onClick={this.publish.bind(this)}>
+        <button
+          className="liveblog-btn liveblog-publish-btn"
+          onClick={this.publish.bind(this)}
+          disabled={cantPublish}>
           {isEditing ? 'Publish Update' : 'Publish New Entry'}
         </button>
       </div>
