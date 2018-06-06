@@ -1,6 +1,7 @@
 .liveblog-share {
     padding-top: 10px;
     .share-social {
+        display: inline-block;
         padding: 0px;
         border: none;
         border-radius: 50%;
@@ -14,16 +15,8 @@
             width: 100%;
             display: block;
         }
-    }
-    @media (min-width: 768px) {
-        .share-whatsapp {
-            display: none;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .share-email {
-            display: none;
+        &:hover, &:focus {
+            box-shadow: none;
         }
     }
 }
