@@ -603,7 +603,6 @@ class WPCOM_Liveblog_Rest_Api {
 		return $entries;
 	}
 
-
 	/**
 	 * Get key events
 	 *

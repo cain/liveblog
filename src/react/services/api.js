@@ -105,11 +105,15 @@ export function getEvents(config, newestEntry) {
   return ajax(settings);
 }
 
-export function jumpToEvent(id, config, newestEntry) {
+export function jumpToEvent(id, config, newestEntry, isLoadMore) {
   const settings = {
     url: `${config.endpoint_url}jump-to-key-event/${id}/${newestEntry.id || 0}-${newestEntry.timestamp || 0}`,
     method: 'GET',
   };
+
+  if (isLoadMore) {
+    settings.url = `${config.endpoint_url}load-more-entries/${id}`;
+  }
 
   return ajax(settings);
 }
