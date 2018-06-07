@@ -844,7 +844,7 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 				$index = $index + 1;
 				$page  = ceil( $index / $per_page );
 			}
-
+			
 			$offset  = $per_page * ( $page - 1 );
 			$number_of_entries = $per_page;
 
@@ -1031,6 +1031,7 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 						'is_liveblog_editable'         => self::is_liveblog_editable(),
 						'current_user'           	   => self::get_current_user(),
 						'socketio_enabled'             => WPCOM_Liveblog_Socketio_Loader::is_enabled(),
+						'paginationType'               => 'page',
 
 						'key'                          => self::KEY,
 						'nonce_key'                    => self::NONCE_KEY,

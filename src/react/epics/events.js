@@ -47,7 +47,7 @@ const deleteEventEpic = (action$, store) =>
 const jumpToEventEpic = (action$, store) =>
   action$.ofType(types.JUMP_TO_EVENT)
     .switchMap(({ payload }) =>
-      jumpToEvent(payload, store.getState().config, store.getState().api.newestEntry)
+      jumpToEvent(payload, store.getState().config, store.getState().api.newestEntry, store.getState().config.paginationType === 'loadMore')
         .timeout(10000)
         .flatMap((res) => {
           if (!res.response.entries.some(x => x.id === payload)) {
