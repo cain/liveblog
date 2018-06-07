@@ -137,7 +137,7 @@ export const getNewestEntry = (current, update, entries = false) => {
  */
 export const daysAgo = (time, utcOffset) => {
   const currentUTCTime = moment().utcOffset(utcOffset, true);
-  return currentUTCTime.diff(time, 'days');
+  return currentUTCTime.diff(moment.unix(time), 'days');
 };
 
 /**
@@ -163,6 +163,14 @@ export const getPollingPages = (current, next) => {
   if (!next) return current;
   return Math.max(next, 1);
 };
+
+/**
+ * Returns a formated string from timestamp in HH MM format.
+ * @param {Number} timestamp
+ * @return {String} utcOffset Utc Offset from server
+ */
+export const simpleFormatTime = (timestamp, utcOffset, timeFormat) =>
+  moment.unix(timestamp).utcOffset(utcOffset, false).format(timeFormat);
 
 /**
  * Fires of any oembed triggers need and adds an event listener that

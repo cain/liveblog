@@ -175,12 +175,8 @@ class Test_Entry extends WP_UnitTestCase {
 	}
 
 	private function build_entry_args( $args = array() ) {
-		$user     = $this->factory->user->create_and_get();
-		$defaults = array(
-			'post_id' => 1,
-			'content' => 'baba',
-			'user'    => $user,
-		);
+		$user = $this->factory->user->create_and_get();
+		$defaults = array( 'post_id' => 1, 'content' => 'baba', 'user' => $user, 'is_key_event' => false);
 		return array_merge( $defaults, $args );
 	}
 

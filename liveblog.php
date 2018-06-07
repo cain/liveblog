@@ -87,6 +87,7 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 			WPCOM_Liveblog_Lazyloader::load();
 			WPCOM_Liveblog_Socketio_Loader::load();
 			WPCOM_Liveblog_Entry_Embed_SDKs::load();
+			WPCOM_Liveblog_AMP::load();
 
 			if ( self::use_rest_api() ) {
 				WPCOM_Liveblog_Rest_Api::load();
@@ -137,6 +138,8 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 			require( dirname( __FILE__ ) . '/classes/class-wpcom-liveblog-socketio-loader.php' );
 			require( dirname( __FILE__ ) . '/classes/class-wpcom-liveblog-entry-embed.php' );
 			require( dirname( __FILE__ ) . '/classes/class-wpcom-liveblog-entry-embed-sdks.php' );
+			require( dirname( __FILE__ ) . '/classes/class-wpcom-liveblog-amp.php' );
+			require( dirname( __FILE__ ) . '/classes/class-wpcom-liveblog-amp-template.php' );
 
 			if ( self::use_rest_api() ) {
 				require( dirname( __FILE__ ) . '/classes/class-wpcom-liveblog-rest-api.php' );
@@ -593,6 +596,7 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 			$args['entry_id']        = isset( $_POST['entry_id'] ) ? intval( $_POST['entry_id'] ) : 0; // input var ok
 			$args['author_id']       = isset( $_POST['author_id'] ) ? intval( $_POST['author_id'] ) : false; // input var ok
 			$args['contributor_ids'] = isset( $_POST['contributor_ids'] ) ? sanitize_text_field( wp_unslash( $_POST['contributor_ids'] ) ) : false; // input var ok
+			$args['is_key_event'] 	 = isset( $_POST['is_key_event'] ) ? boolval( $_POST['is_key_event'] ) : false;
 
 			$entry = self::do_crud_entry( $crud_action, $args );
 
@@ -784,6 +788,23 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 			}
 
 			return $result;
+		}
+
+		/**
+		 * Get single entry
+		 *
+		 * @param int $id entry id
+		 * @return array An array of json encoded results
+		 */
+		public static function get_single_liveblog_entry( $id = false ) {
+			if ( empty( self::$entry_query ) ) {
+				self::$entry_query = new WPCOM_Liveblog_Entry_Query( self::$post_id, self::KEY );
+			}
+
+			$entry = self::$entry_query->get_by_id( $id );
+
+			//var_dump( $entry );
+			//die();
 		}
 
 		/**

@@ -741,10 +741,7 @@ class Test_REST_API extends WP_UnitTestCase {
 	}
 
 	private function build_entry_args( $args = array() ) {
-		$defaults = array(
-			'post_id' => 1,
-			'content' => 'Test Liveblog entry',
-		);
+		$defaults = array( 'post_id' => 1, 'content' => 'Test Liveblog entry', 'is_key_event' => false);
 		return array_merge( $defaults, $args );
 	}
 
