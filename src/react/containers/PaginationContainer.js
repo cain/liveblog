@@ -15,7 +15,7 @@ class PaginationContainer extends Component {
         <div className="liveblog-pagination">
           {!isLastPage &&
           <button
-            className="liveblog-btn liveblog-pagination-btn liveblog-pagination-next"
+            className="liveblog-btn liveblog-pagination-btn liveblog-pagination-load-more"
             onClick={() => getEntriesPaginated(page + 1)}
           >
               Load More

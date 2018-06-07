@@ -43,6 +43,11 @@ class EventsContainer extends Component {
       daysAgo(event.entry_time, utcOffset) !==
       daysAgo(this.parseEvents(events)[i + 1].entry_time, utcOffset));
 
+
+    if (events.length < 1) {
+      return '';
+    }
+
     return (
       <div>
         <h2 className="widget-title">Highlights</h2>
