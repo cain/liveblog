@@ -377,30 +377,6 @@ class WPCOM_Liveblog_Rest_Api {
 	}
 
 	/**
-	 * load_more_entries based on an entry id
-	 *
-	 * @param WP_REST_Request $request A REST request object
-	 *
-	 * @return array An array of entries
-	 */
-	public static function load_more_entries( WP_REST_Request $request ) {
-
-		// Get required parameters from the request
-		$post_id          = $request->get_param( 'post_id' );
-		$entry_id = $request->get_param( 'entry_id' );
-
-		self::set_liveblog_vars( $post_id );
-
-		$entries = WPCOM_Liveblog::get_entries_paged( false, false, $entry_id, true );
-
-		// Possibly do not cache the response
-		WPCOM_Liveblog::prevent_caching_if_needed();
-
-		return $entries;
-	}
-
-
-	/**
 	 * Perform a specific CRUD action on an entry
 	 * Allowed actions are 'insert', 'update', 'delete', 'delete_key'
 	 *
@@ -602,6 +578,28 @@ class WPCOM_Liveblog_Rest_Api {
 		return $entries;
 	}
 
+	/**
+	 * load_more_entries based on an entry id
+	 *
+	 * @param WP_REST_Request $request A REST request object
+	 *
+	 * @return array An array of entries
+	 */
+	public static function load_more_entries( WP_REST_Request $request ) {
+
+		// Get required parameters from the request
+		$post_id          = $request->get_param( 'post_id' );
+		$entry_id = $request->get_param( 'entry_id' );
+
+		self::set_liveblog_vars( $post_id );
+
+		$entries = WPCOM_Liveblog::get_entries_paged( false, false, $entry_id, true );
+
+		// Possibly do not cache the response
+		WPCOM_Liveblog::prevent_caching_if_needed();
+
+		return $entries;
+	}
 
 	/**
 	 * Get key events
