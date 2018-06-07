@@ -33,6 +33,7 @@ class AppContainer extends Component {
     return (
       <div style={{ position: 'relative' }}>
         {(page === 1 && canEdit) && <EditorContainer isEditing={false} />}
+        <h2 className="liveblog-feed-title">Live Updates</h2>
         <UpdateButton polling={polling} click={() => mergePolling()} />
         <PaginationContainer />
         <Entries loading={loading} entries={entries} />
