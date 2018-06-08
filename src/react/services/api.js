@@ -37,9 +37,11 @@ export function createEntry(entry, config, nonce = false) {
     body: {
       crud_action: 'insert',
       post_id: config.post_id,
+      is_key_event: entry.isKeyEvent,
       content: entry.content,
       author_id: entry.author,
       contributor_ids: entry.contributors,
+      headline: entry.headline,
     },
     headers: {
       'Content-Type': 'application/json',
@@ -62,6 +64,8 @@ export function updateEntry(entry, config, nonce = false) {
       content: entry.content,
       author_id: entry.author,
       contributor_ids: entry.contributors,
+      is_key_event: entry.isKeyEvent,
+      headline: entry.headline,
     },
     headers: {
       'Content-Type': 'application/json',
@@ -101,11 +105,15 @@ export function getEvents(config, newestEntry) {
   return ajax(settings);
 }
 
-export function jumpToEvent(id, config, newestEntry) {
+export function jumpToEvent(id, config, newestEntry, isLoadMore) {
   const settings = {
     url: `${config.endpoint_url}jump-to-key-event/${id}/${newestEntry.id || 0}-${newestEntry.timestamp || 0}`,
     method: 'GET',
   };
+
+  if (isLoadMore) {
+    settings.url = `${config.endpoint_url}load-more-entries/${id}`;
+  }
 
   return ajax(settings);
 }
