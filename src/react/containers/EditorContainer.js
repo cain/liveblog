@@ -19,6 +19,7 @@ import { getAuthors, getHashtags, uploadImage } from '../services/api';
 import PreviewContainer from './PreviewContainer';
 import AuthorSelectOption from '../components/AuthorSelectOption';
 import HTMLInput from '../components/HTMLInput';
+import PostHeadline from '../components/PostHeadline';
 
 import Editor, { decorators, convertFromHTML, convertToHTML } from '../Editor/index';
 
@@ -30,6 +31,8 @@ class EditorContainer extends Component {
 
     let initialEditorState;
     let initialAuthors;
+    let keyEvent;
+    let entryId;
 
     if (props.entry) {
       initialEditorState = EditorState.createWithContent(
@@ -41,9 +44,13 @@ class EditorContainer extends Component {
         decorators,
       );
       initialAuthors = props.entry.authors;
+      keyEvent = props.entry.key_event;
+      entryId = props.entry.id;
     } else {
       initialEditorState = EditorState.createEmpty(decorators);
       initialAuthors = [props.config.current_user];
+      keyEvent = false;
+      entryId = '';
     }
 
     this.state = {
@@ -52,12 +59,20 @@ class EditorContainer extends Component {
       authors: initialAuthors,
       mode: 'editor',
       readOnly: false,
+      headline: props.entry ? props.entry.headline : '',
       rawText: props.entry ? props.entry.content : '',
+      isKeyEvent: keyEvent,
+      entryId,
+      lastUpdate: new Date().getTime(),
     };
 
     this.onChange = editorState => this.setState({
       editorState,
       rawText: html(convertToHTML(editorState.getCurrentContent())),
+    });
+
+    this.clearHeadline = () => this.setState({
+      headline: '',
     });
   }
 
@@ -65,6 +80,10 @@ class EditorContainer extends Component {
     this.setState({
       readOnly: state,
     });
+  }
+
+  onToggleKeyEvent() {
+    this.setState({ isKeyEvent: !this.state.isKeyEvent });
   }
 
   getContent() {
@@ -88,11 +107,12 @@ class EditorContainer extends Component {
 
   publish() {
     const { updateEntry, entry, entryEditClose, createEntry, isEditing } = this.props;
-    const { editorState, authors } = this.state;
+    const { editorState, authors, isKeyEvent } = this.state;
     const content = this.getContent();
     const authorIds = authors.map(author => author.id);
     const author = authorIds.length > 0 ? authorIds[0] : false;
     const contributors = authorIds.length > 1 ? authorIds.slice(1, authorIds.length) : false;
+    const headline = this.state.headline;
 
     if (isEditing) {
       updateEntry({
@@ -100,6 +120,8 @@ class EditorContainer extends Component {
         content,
         author,
         contributors,
+        isKeyEvent,
+        headline,
       });
       entryEditClose(entry.id);
       return;
@@ -109,6 +131,8 @@ class EditorContainer extends Component {
       content,
       author,
       contributors,
+      isKeyEvent,
+      headline,
     });
 
     const newEditorState = EditorState.push(
@@ -117,12 +141,22 @@ class EditorContainer extends Component {
     );
 
     this.onChange(newEditorState);
-    this.setState({ readOnly: false });
+    this.setState({
+      readOnly: false,
+      isKeyEvent: false,
+      lastUpdate: new Date().getTime(),
+    });
   }
 
   onSelectAuthorChange(value) {
     this.setState({
       authors: value,
+    });
+  }
+
+  onHeadlineChange(value) {
+    this.setState({
+      headline: value,
     });
   }
 
@@ -209,7 +243,7 @@ class EditorContainer extends Component {
         .timeout(60000)
         .map(res => res.response)
         .subscribe((res) => {
-          const src = getImageSize(res.data.sizes, config.default_image_size);
+          const src = getImageSize(res.data, config.default_image_size);
           resolve(src);
         });
     });
@@ -222,29 +256,38 @@ class EditorContainer extends Component {
       mode,
       authors,
       readOnly,
+      isKeyEvent,
+      entryId,
+      headline,
+      lastUpdate,
     } = this.state;
-
     const { isEditing, config } = this.props;
-
+    const cantPublish = isKeyEvent && !headline;
     return (
       <div className="liveblog-editor-container">
         {!isEditing && <h1 className="liveblog-editor-title">Add New Entry</h1>}
+        <PostHeadline
+          onChange={this.onHeadlineChange.bind(this)}
+          headline={headline}
+          lastUpdate={lastUpdate}
+          clearHeadline={this.clearHeadline.bind(this)}
+        />
         <div className="liveblog-editor-tabs">
           <button
             className={`liveblog-editor-tab ${mode === 'editor' ? 'is-active' : ''}`}
-            onClick={() => this.setState({ mode: 'editor' })}
+            onClick={(e) => { e.preventDefault(); this.setState({ mode: 'editor' }); } }
           >
             Visual
           </button>
           <button
             className={`liveblog-editor-tab ${mode === 'raw' ? 'is-active' : ''}`}
-            onClick={() => this.setState({ mode: 'raw' })}
+            onClick={(e) => { e.preventDefault(); this.setState({ mode: 'raw' }); } }
           >
               Text
           </button>
           <button
             className={`liveblog-editor-tab ${mode === 'preview' ? 'is-active' : ''}`}
-            onClick={() => this.setState({ mode: 'preview' })}
+            onClick={(e) => { e.preventDefault(); this.setState({ mode: 'preview' }); } }
           >
               Preview
           </button>
@@ -271,6 +314,20 @@ class EditorContainer extends Component {
             defaultImageSize={config.default_image_size}
           />
         }
+        {cantPublish && <small className="liveblog-warning">Key events must have a headline</small>}
+        <div className="liveblog-metabox-key-events-checkbox">
+          <label
+            htmlFor={`key-event-checkbox-${entryId}`}
+          >
+            <input
+              type="checkbox"
+              id={`key-event-checkbox-${entryId}`}
+              onChange={this.onToggleKeyEvent.bind(this)}
+              checked={isKeyEvent}
+            />
+            Key Event
+          </label>
+        </div>
         {
           mode === 'raw' &&
           <HTMLInput
@@ -296,7 +353,10 @@ class EditorContainer extends Component {
           clearable={false}
           cache={false}
         />
-        <button className="liveblog-btn liveblog-publish-btn" onClick={this.publish.bind(this)}>
+        <button
+          className="liveblog-btn liveblog-publish-btn"
+          onClick={this.publish.bind(this)}
+          disabled={cantPublish}>
           {isEditing ? 'Publish Update' : 'Publish New Entry'}
         </button>
       </div>
@@ -310,6 +370,7 @@ EditorContainer.propTypes = {
   entry: PropTypes.object,
   entryEditClose: PropTypes.func,
   createEntry: PropTypes.func,
+  onToggleKeyEvent: PropTypes.func,
   isEditing: PropTypes.bool,
   authors: PropTypes.array,
   getAuthors: PropTypes.func,

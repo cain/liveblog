@@ -87,6 +87,7 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 			WPCOM_Liveblog_Lazyloader::load();
 			WPCOM_Liveblog_Socketio_Loader::load();
 			WPCOM_Liveblog_Entry_Embed_SDKs::load();
+			WPCOM_Liveblog_AMP::load();
 
 			if ( self::use_rest_api() ) {
 				WPCOM_Liveblog_Rest_Api::load();
@@ -137,6 +138,8 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 			require( dirname( __FILE__ ) . '/classes/class-wpcom-liveblog-socketio-loader.php' );
 			require( dirname( __FILE__ ) . '/classes/class-wpcom-liveblog-entry-embed.php' );
 			require( dirname( __FILE__ ) . '/classes/class-wpcom-liveblog-entry-embed-sdks.php' );
+			require( dirname( __FILE__ ) . '/classes/class-wpcom-liveblog-amp.php' );
+			require( dirname( __FILE__ ) . '/classes/class-wpcom-liveblog-amp-template.php' );
 
 			if ( self::use_rest_api() ) {
 				require( dirname( __FILE__ ) . '/classes/class-wpcom-liveblog-rest-api.php' );
@@ -593,6 +596,7 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 			$args['entry_id']        = isset( $_POST['entry_id'] ) ? intval( $_POST['entry_id'] ) : 0; // input var ok
 			$args['author_id']       = isset( $_POST['author_id'] ) ? intval( $_POST['author_id'] ) : false; // input var ok
 			$args['contributor_ids'] = isset( $_POST['contributor_ids'] ) ? sanitize_text_field( wp_unslash( $_POST['contributor_ids'] ) ) : false; // input var ok
+			$args['is_key_event'] 	 = isset( $_POST['is_key_event'] ) ? boolval( $_POST['is_key_event'] ) : false;
 
 			$entry = self::do_crud_entry( $crud_action, $args );
 
@@ -787,14 +791,32 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 		}
 
 		/**
+		 * Get single entry
+		 *
+		 * @param int $id entry id
+		 * @return array An array of json encoded results
+		 */
+		public static function get_single_liveblog_entry( $id = false ) {
+			if ( empty( self::$entry_query ) ) {
+				self::$entry_query = new WPCOM_Liveblog_Entry_Query( self::$post_id, self::KEY );
+			}
+
+			$entry = self::$entry_query->get_by_id( $id );
+
+			//var_dump( $entry );
+			//die();
+		}
+
+		/**
 		 * Get all entries for specific page
 		 *
 		 * @param int $page Requested Page.
 		 * @param string $last_know_entry id-timestamp of the last rendered entry.
 		 * @param int $id entry id
+		 * @param bool $is_load_more
 		 * @return array An array of json encoded results
 		 */
-		public static function get_entries_paged( $page, $last_known_entry = false, $id = false ) {
+		public static function get_entries_paged( $page, $last_known_entry = false, $id = false, $is_load_more = false ) {
 
 			if ( empty( self::$entry_query ) ) {
 				self::$entry_query = new WPCOM_Liveblog_Entry_Query( self::$post_id, self::KEY );
@@ -822,9 +844,17 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 				$index = $index + 1;
 				$page  = ceil( $index / $per_page );
 			}
-
+			
 			$offset  = $per_page * ( $page - 1 );
-			$entries = array_slice( $entries, $offset, $per_page );
+			$number_of_entries = $per_page;
+
+			//if $is_load_more is true, load all entries prior to the given entry
+			if ( true === $is_load_more && false !== $id && isset( $page ) ) {
+				$offset  = 0;
+				$number_of_entries = $per_page * $page;
+			}
+
+			$entries = array_slice( $entries, $offset, $number_of_entries );
 			$entries = self::entries_for_json( $entries );
 
 			$result = array(
@@ -1001,6 +1031,7 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 						'is_liveblog_editable'         => self::is_liveblog_editable(),
 						'current_user'           	   => self::get_current_user(),
 						'socketio_enabled'             => WPCOM_Liveblog_Socketio_Loader::is_enabled(),
+						'paginationType'               => 'page',
 
 						'key'                          => self::KEY,
 						'nonce_key'                    => self::NONCE_KEY,
