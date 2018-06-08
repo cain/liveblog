@@ -243,7 +243,7 @@ class EditorContainer extends Component {
         .timeout(60000)
         .map(res => res.response)
         .subscribe((res) => {
-          const src = getImageSize(res.data.sizes, config.default_image_size);
+          const src = getImageSize(res.data, config.default_image_size);
           resolve(src);
         });
     });
