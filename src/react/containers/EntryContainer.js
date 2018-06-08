@@ -77,9 +77,15 @@ class EntryContainer extends Component {
             <span>{timeAgo(entry.entry_time)}</span>
             <span>{formattedTime(entry.entry_time, config.utc_offset, config.date_format)}</span>
           </a>
+          {entry.key_event && <span className="liveblog-label-highlight">Highlight</span>}
         </aside>
         <div className="liveblog-entry-main">
           <header className="liveblog-meta">
+            { entry.headline &&
+              <h2 className="liveblog-entry-header">
+                {entry.headline}
+              </h2>
+            }
             {
               (entry.authors && entry.authors.length > 0) &&
               <div className="liveblog-meta-authors">
@@ -97,11 +103,6 @@ class EntryContainer extends Component {
                   ))
                 }
               </div>
-            }
-            { entry.headline &&
-              <h2 className="liveblog-entry-header">
-                {entry.headline}
-              </h2>
             }
           </header>
           {

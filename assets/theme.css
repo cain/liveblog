@@ -8,6 +8,7 @@
   background: #f7f7f7;
   border-top: 2px solid #eee;
   border-bottom: 2px solid #eee;
+  flex-direction: column;
 }
 
 .liveblog-entry.is-key-event {
@@ -19,9 +20,9 @@
 }
 
 .liveblog-entry-aside {
-  flex-basis: 70px;
-  min-width: 70px;
-  margin-right: 10px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
 }
 
 .liveblog-entry-main {
