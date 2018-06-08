@@ -14,14 +14,10 @@ import { getImageSize } from '../utils';
  * @param {object} image
  */
 const getImageThumbnail = (image) => {
-<<<<<<< HEAD
   if (!image || !Object.keys(image.media_details).length) return '';
   if (image.media_details.sizes.spp_thumbnail) {
     return image.media_details.sizes.spp_thumbnail.source_url;
   }
-=======
-  if (!image || !image.media_details || !image.media_details.sizes) return '';
->>>>>>> 7da79e92a906a52587f705b3eaf6ea4199f58c9a
   if (image.media_details.sizes.thumbnail) {
     return image.media_details.sizes.thumbnail.source_url;
   }
