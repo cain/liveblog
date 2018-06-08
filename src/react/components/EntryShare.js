@@ -19,18 +19,18 @@ class EntryShare extends Component {
       return false;
     }
     let description = story.querySelector('.liveblog-entry-content').innerText.trim();
-    // truncate post for twitter
-    if (description.length > (280 - postLink.length - 2)) {
-      description = `${description.substr(0, 280 - postLink.length - 3)} …`;
-    }
     if (headline) {
       description = headline;
     }
+    // truncate post for twitter
+    if (description.length > (150 - postLink.length - 2)) {
+      description = `${description.substr(0, 150 - postLink.length - 3)} …`;
+    }
     return this.setState({
-      twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(description)}&url=${postLink}`,
-      facebook: `https://www.facebook.com/dialog/share?app_id=135086289853833&href=${postLink}&redirect_uri${postLink}`,
-      email: `mailto:?subject=${document.title}&body=${encodeURIComponent(description)}`,
-      whatsapp: `whatsapp://send?text=${document.title} ${encodeURIComponent(description)}`,
+      twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(description)}&url=${encodeURIComponent(postLink)}`,
+      facebook: `https://www.facebook.com/dialog/share?app_id=135086289853833&href=${encodeURIComponent(postLink)}&redirect_uri${encodeURIComponent(postLink)}`,
+      email: `mailto:?subject=${description}&body=${encodeURIComponent(postLink)}`,
+      whatsapp: `whatsapp://send?text=${encodeURIComponent(`${description} ${postLink}`)}`,
     });
   }
 
