@@ -8,6 +8,19 @@ export const getFirstOfObject = object => object[Object.keys(object)[0]];
 
 export const getItemOfObject = (object, key) => object[Object.keys(object)[key]];
 
+moment.updateLocale('en', {
+  relativeTime: {
+    future: 'in %s',
+    past: '%s ago',
+    s: 'a few seconds',
+    ss: '%ds',
+    m: '1m',
+    mm: '%dm',
+    h: '1h',
+    hh: '%dh',
+  },
+});
+
 /**
  * Apply updated entries to current entries.
  * @param {Object} currentEntries
@@ -130,22 +143,24 @@ export const getNewestEntry = (current, update, entries = false) => {
 };
 
 /**
- * Get days between two timestamps
+ * Get time between two dates
  * @param {Object} time Moment Time
  * @param {Number} utcOffset Utc Offset from server
+ * @param {String} unit for difference, default days
  * @return {Number}
  */
-export const daysAgo = (time, utcOffset) => {
+export const timeAgo = (time, utcOffset, unit = 'days') => {
   const currentUTCTime = moment().utcOffset(utcOffset, true);
-  return currentUTCTime.diff(moment.unix(time), 'days');
+  return currentUTCTime.diff(moment.unix(time), unit);
 };
 
 /**
  * Returns a formated string indicating how long ago a timestamp was.
  * @param {Number} timestamp Unix Timestamp in seconds
+ * @param {Boolean} suffix to return 'ago' into string
  * @return {String} utcOffset Utc Offset from server
  */
-export const timeAgo = timestamp => moment.unix(timestamp).utc().fromNow();
+export const fromNow = (timestamp, suffix = false) => moment.unix(timestamp).utc().fromNow(suffix);
 
 /**
  * Returns a formated string from timestamp in HH MM format.
@@ -167,10 +182,26 @@ export const getPollingPages = (current, next) => {
 /**
  * Returns a formated string from timestamp in HH MM format.
  * @param {Number} timestamp
- * @return {String} utcOffset Utc Offset from server
+ * @param {Number} utcOffset Utc Offset from server
+ * @param {String} format type
+ * @return {String} formated timestamp
  */
 export const simpleFormatTime = (timestamp, utcOffset, timeFormat) =>
   moment.unix(timestamp).utcOffset(utcOffset, false).format(timeFormat);
+
+/**
+ * Logic to display different dates depending on difference.
+ * @param {Object} time Moment Time
+ * @param {Number} utcOffset Utc Offset from server
+ * @param {Boolean} suffix for fromNow
+ * @return {Number}
+ */
+export const timestampLogic = (time, utcOffset, suffix) => {
+  if (timeAgo(time, utcOffset, 'hour') < 4) {
+    return fromNow(time, suffix);
+  }
+  return simpleFormatTime(time, utcOffset, 'h:mm a');
+};
 
 /**
  * Fires of any oembed triggers need and adds an event listener that
