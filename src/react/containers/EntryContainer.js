@@ -19,7 +19,12 @@ class EntryContainer extends Component {
     };
     this.edit = () => this.props.entryEditOpen(this.props.entry.id);
     this.close = () => this.props.entryEditClose(this.props.entry.id);
-    this.delete = () => this.props.deleteEntry(this.props.entry.id);
+    this.delete = () => {
+      /* eslint no-alert: 0 */
+      if (window.confirm('Are you sure you want to delete this entry?')) {
+        this.props.deleteEntry(this.props.entry.id);
+      }
+    };
     this.scrollIntoView = () => {
       this.node.scrollIntoView({ block: 'start', behavior: 'instant' });
       this.props.resetScrollOnEntry(`id_${this.props.entry.id}`);
