@@ -12,7 +12,7 @@ class PaginationContainer extends Component {
 
     if (paginationType === 'loadMore') {
       return (
-        <div className="liveblog-pagination">
+        <div className={`liveblog-pagination liveblog-pagination-type-${paginationType}`}>
           {!isLastPage &&
           <button
             className="liveblog-btn liveblog-pagination-btn liveblog-pagination-next"
@@ -24,7 +24,7 @@ class PaginationContainer extends Component {
       );
     }
     return (
-      <div className="liveblog-pagination">
+      <div className={`liveblog-pagination liveblog-pagination-type-${paginationType}`}>
         <div>
           <button
             disabled={page === 1}
