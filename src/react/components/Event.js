@@ -1,13 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { formattedTime, simpleFormatTime } from '../utils/utils';
+import { formattedTime, timestampLogic, timeAgo } from '../utils/utils';
 
 const Event = ({ event, click, utcOffset, dateFormat, shouldDivide }) => (
   <React.Fragment>
+    {shouldDivide && timeAgo(event.entry_time, utcOffset, 'hour') > 4 &&
+    <li className="liveblog-event liveblog-event-body-divider">
+      {formattedTime(event.entry_time, utcOffset, dateFormat)}
+    </li>}
     <li className="liveblog-event">
       <div className="liveblog-event-body">
         <div className="liveblog-event-meta">
-          {simpleFormatTime(event.entry_time, utcOffset, 'h:mm a')}
+          {timestampLogic(event.entry_time, utcOffset, true)}
         </div>
         <div>
           <span
@@ -18,10 +22,6 @@ const Event = ({ event, click, utcOffset, dateFormat, shouldDivide }) => (
         </div>
       </div>
     </li>
-    {shouldDivide &&
-    <li className="liveblog-event liveblog-event-body-divider">
-      {formattedTime(event.entry_time, utcOffset, dateFormat)}
-    </li>}
   </React.Fragment>
 );
 

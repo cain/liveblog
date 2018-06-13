@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import * as eventsActions from '../actions/eventsActions';
 
 import Event from '../components/Event';
-import { daysAgo } from '../utils/utils';
+import { timeAgo } from '../utils/utils';
 
 class EventsContainer extends Component {
   constructor(props) {
@@ -39,9 +39,9 @@ class EventsContainer extends Component {
 
     const shouldDivide = (event, i) =>
       event &&
-      ((this.parseEvents(events).length - 1) === i ||
-      daysAgo(event.entry_time, utcOffset) !==
-      daysAgo(this.parseEvents(events)[i + 1].entry_time, utcOffset));
+      (i === 0 ||
+      timeAgo(event.entry_time, utcOffset) !==
+      timeAgo(this.parseEvents(events)[i - 1].entry_time, utcOffset));
 
 
     if (events.length < 1) {

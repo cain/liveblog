@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as apiActions from '../actions/apiActions';
 import * as userActions from '../actions/userActions';
-import { triggerOembedLoad, timeAgo, formattedTime } from '../utils/utils';
+import { triggerOembedLoad, formattedTime, timestampLogic } from '../utils/utils';
 import EditorContainer from '../containers/EditorContainer';
 import EntryShare from '../components/EntryShare';
 
@@ -66,7 +66,6 @@ class EntryContainer extends Component {
 
   render() {
     const { entry, config } = this.props;
-
     return (
       <article
         id={`id_${entry.id}`}
@@ -75,7 +74,7 @@ class EntryContainer extends Component {
       >
         <aside className="liveblog-entry-aside">
           <a className="liveblog-meta-time" href={entry.share_link}>
-            <span>{timeAgo(entry.entry_time)}</span>
+            <span>{timestampLogic(entry.entry_time, config.utc_offset, false)}</span>
             <span>{formattedTime(entry.entry_time, config.utc_offset, config.date_format)}</span>
           </a>
           {entry.key_event && <span className="liveblog-label-highlight">Highlight</span>}
