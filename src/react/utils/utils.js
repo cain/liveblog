@@ -150,7 +150,7 @@ export const getNewestEntry = (current, update, entries = false) => {
  * @return {Number}
  */
 export const timeAgo = (time, utcOffset, unit = 'days') => {
-  const currentUTCTime = moment().utcOffset(utcOffset, true);
+  const currentUTCTime = moment().utcOffset(utcOffset, false);
   return currentUTCTime.diff(moment.unix(time), unit);
 };
 
