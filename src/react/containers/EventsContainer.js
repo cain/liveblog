@@ -34,7 +34,9 @@ class EventsContainer extends Component {
     const { deleteEvent, jumpToEvent, canEdit, utcOffset, dateFormat } = this.props;
     const { expand } = this.state;
 
-    const events = Object.values(this.props.events);
+    const events =
+      Object.keys(this.props.events).map(o => this.props.events[o]);
+
     const canExpand = events.length > 3;
 
     const shouldDivide = (event, i) =>
