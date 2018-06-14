@@ -16,6 +16,10 @@ const Event = ({ event, click, utcOffset, dateFormat, shouldDivide }) => (
         <div>
           <span
             className="liveblog-event-content"
+            data-tgev="event23"
+            data-tgev-metric="ev"
+            data-tgev-label="highlight-link"
+            data-tgev-container="live-coverage"
             onClick={click}
             dangerouslySetInnerHTML={{ __html: event.headline || event.key_event_content }}
           />

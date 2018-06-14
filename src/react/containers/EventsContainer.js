@@ -68,6 +68,10 @@ class EventsContainer extends Component {
         {canExpand && <div className="liveblog-events-expand">
           <button
             className={`liveblog-events-expand-button ${expand ? 'expand-up' : 'expand-down'}`}
+            data-tgev="event23"
+            data-tgev-metric="ev"
+            data-tgev-label="highlight-expand"
+            data-tgev-container="live-coverage"
             onClick={() => this.toggleExpand()}>
             <svg width="20" height="10" viewBox="0 0 17.5 10" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
