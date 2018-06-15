@@ -68,7 +68,7 @@ class EventsContainer extends Component {
         {canExpand && <div className="liveblog-events-expand">
           <button
             className={`liveblog-events-expand-button ${expand ? 'expand-up' : 'expand-down'}`}
-            data-tgev="event23"
+            data-tgev="event10"
             data-tgev-metric="ev"
             data-tgev-label="highlight-expand"
             data-tgev-container="live-coverage"

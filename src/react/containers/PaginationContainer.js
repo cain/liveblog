@@ -16,7 +16,7 @@ class PaginationContainer extends Component {
           {!isLastPage &&
           <button
             className="liveblog-btn liveblog-pagination-btn liveblog-pagination-load-more"
-            data-tgev="event23"
+            data-tgev="event10"
             data-tgev-metric="ev"
             data-tgev-label="load-more"
             data-tgev-container="live-coverage"
