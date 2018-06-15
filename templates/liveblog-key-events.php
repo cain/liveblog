@@ -1,1 +1,1 @@
-<div id="liveblog-key-events"></div>
+<div class="liveblog-key-events"></div>
