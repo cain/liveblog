@@ -1032,6 +1032,7 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 						'current_user'           	   => self::get_current_user(),
 						'socketio_enabled'             => WPCOM_Liveblog_Socketio_Loader::is_enabled(),
 						'paginationType'               => 'page',
+						'highlightsCount'			   => 3,
 
 						'key'                          => self::KEY,
 						'nonce_key'                    => self::NONCE_KEY,
