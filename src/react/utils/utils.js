@@ -144,7 +144,7 @@ export const getNewestEntry = (current, update, entries = false) => {
 
 /**
  * Get time between two dates
- * @param {Object} time Moment Time
+ * @param {Number} unix time Moment Time
  * @param {Number} utcOffset Utc Offset from server
  * @param {String} unit for difference, default days
  * @return {Number}
@@ -152,6 +152,17 @@ export const getNewestEntry = (current, update, entries = false) => {
 export const timeAgo = (time, utcOffset, unit = 'days') => {
   const currentUTCTime = moment().utcOffset(utcOffset, false);
   return currentUTCTime.diff(moment.unix(time), unit);
+};
+
+/**
+ * Get day difference between two dates
+ * @param {Object} unix time Moment Time
+ * @param {Number} utcOffset Utc Offset from server
+ * @return {Number}
+ */
+export const dayDiff = (time, utcOffset) => {
+  const currentUTCTime = moment().utcOffset(utcOffset, false).startOf('day');
+  return currentUTCTime.diff(moment.unix(time).startOf('day'), 'day');
 };
 
 /**
