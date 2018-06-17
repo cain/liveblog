@@ -106,20 +106,12 @@ class WPCOM_Liveblog_Entry_Extend_Feature_Hashtags extends WPCOM_Liveblog_Entry_
 
 	/**
 	 * Filters the input.
-	 *
+	 * TODO: Add hashtag feature back in once bug if fixed:
+	 * https://github.com/Automattic/liveblog/issues/418
 	 * @param mixed $entry
 	 * @return mixed
 	 */
 	public function filter( $entry ) {
-
-		// Map over every match and apply it via the
-		// preg_replace_callback method.
-		// $entry['content'] = preg_replace_callback(
-		// 	$this->get_regex(),
-		// 	array( $this, 'preg_replace_callback' ),
-		// 	$entry['content']
-		// );
-
 		return $entry;
 	}
 
