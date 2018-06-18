@@ -20,6 +20,7 @@ const Event = ({ event, click, utcOffset, dateFormat, shouldDivide }) => (
             data-tgev-metric="ev"
             data-tgev-label="highlight-link"
             data-tgev-container="live-coverage"
+            data-tgev-order="1"
             onClick={click}
             dangerouslySetInnerHTML={{ __html: event.headline || event.key_event_content }}
           />

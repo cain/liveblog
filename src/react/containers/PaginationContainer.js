@@ -20,6 +20,7 @@ class PaginationContainer extends Component {
             data-tgev-metric="ev"
             data-tgev-label="load-more"
             data-tgev-container="live-coverage"
+            data-tgev-order="1"
             onClick={() => getEntriesPaginated(page + 1)}
           >
               Load More
