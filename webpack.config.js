@@ -19,7 +19,7 @@ const webpackConfig = {
 
   output: {
     path: path.join(__dirname, paths.out),
-    filename: '[name].js',
+    filename: '[name].min.js',
   },
 
   module: {
