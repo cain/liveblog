@@ -93,10 +93,15 @@ class EventsContainer extends Component {
   }
 
   render() {
-    return ReactDOM.createPortal(
-      this.renderEvents(),
-      this.props.container,
-    );
+    // render multiple event containers if supplied
+    const containers = [].slice.call(this.props.container);
+    if (containers.length > 0) {
+      return containers.map(el => ReactDOM.createPortal(
+        this.renderEvents(),
+        el,
+      ));
+    }
+    return null;
   }
 }
 

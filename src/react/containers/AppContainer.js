@@ -15,7 +15,7 @@ import UpdateButton from '../components/UpdateButton';
 class AppContainer extends Component {
   constructor() {
     super();
-    this.eventsContainer = document.getElementById('liveblog-key-events');
+    this.eventsContainers = document.querySelectorAll('.liveblog-key-events, #liveblog-key-events');
   }
 
   componentDidMount() {
@@ -23,7 +23,7 @@ class AppContainer extends Component {
     loadConfig(window.liveblog_settings);
     getEntries(1, window.location.hash);
     startPolling();
-    if (this.eventsContainer) getEvents();
+    if (this.eventsContainers) getEvents();
   }
 
   render() {
@@ -39,7 +39,7 @@ class AppContainer extends Component {
         {!paginationTypeLoadMore && <PaginationContainer /> }
         <Entries loading={loading} entries={entries} />
         <PaginationContainer />
-        {this.eventsContainer && <EventsContainer container={this.eventsContainer} />}
+        {this.eventsContainers.length > 0 && <EventsContainer container={this.eventsContainers} />}
       </div>
     );
   }
