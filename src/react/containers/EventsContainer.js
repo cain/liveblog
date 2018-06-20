@@ -23,7 +23,7 @@ class EventsContainer extends Component {
     if (this.state.expand) {
       return events;
     }
-    return events.slice(0, 3);
+    return events.slice(0, this.props.highlightsCount || 3);
   }
 
   toggleExpand() {
@@ -37,7 +37,7 @@ class EventsContainer extends Component {
     const events =
       Object.keys(this.props.events).map(o => this.props.events[o]);
 
-    const canExpand = events.length > 3;
+    const canExpand = events.length > (this.props.highlightsCount || 3);
 
     const shouldDivide = (event, i) =>
       event &&
@@ -104,6 +104,7 @@ EventsContainer.propTypes = {
   canEdit: PropTypes.bool,
   utcOffset: PropTypes.string,
   dateFormat: PropTypes.string,
+  highlightsCount: PropTypes.string,
 };
 
 const mapStateToProps = state => ({
@@ -111,6 +112,7 @@ const mapStateToProps = state => ({
   utcOffset: state.config.utc_offset,
   events: state.events.entries,
   canEdit: state.config.is_liveblog_editable === '1',
+  highlightsCount: state.config.highlightsCount,
 });
 
 const mapDispatchToProps = dispatch =>
