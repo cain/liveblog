@@ -1076,6 +1076,9 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 						'class_term_prefix'            => __( 'term-', 'liveblog' ),
 						'class_alert'                  => __( 'type-alert', 'liveblog' ),
 						'class_key'                    => __( 'type-key', 'liveblog' ),
+
+						// Social
+						'facebook_app_id'              => '135086289853833',
 					)
 				)
 			);

@@ -125,7 +125,7 @@ class EntryContainer extends Component {
               )
           }
           {this.entryActions()}
-          <EntryShare entry={entry} />
+          <EntryShare entry={entry} facebookAppId={config.facebook_app_id} />
         </div>
       </article>
     );

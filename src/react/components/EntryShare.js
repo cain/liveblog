@@ -12,6 +12,10 @@ class EntryShare extends Component {
     };
   }
   componentDidMount() {
+    this.generateSocialLinks();
+  }
+
+  generateSocialLinks() {
     const { headline, id } = this.props.entry;
     const story = document.querySelector(`.liveblog-entry-class-${id}`);
     const postLink = story.querySelector('.liveblog-meta-time').getAttribute('href');
@@ -23,12 +27,12 @@ class EntryShare extends Component {
       description = headline;
     }
     // truncate post for twitter
-    if (description.length > (150 - postLink.length - 2)) {
-      description = `${description.substr(0, 150 - postLink.length - 3)} …`;
+    if (description.length > (280 - postLink.length - 2)) {
+      description = `${description.substr(0, 280 - postLink.length - 3)} …`;
     }
     return this.setState({
       twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(description)}&url=${encodeURIComponent(postLink)}`,
-      facebook: `https://www.facebook.com/dialog/share?app_id=135086289853833&href=${encodeURIComponent(postLink)}&redirect_uri${encodeURIComponent(postLink)}`,
+      facebook: `https://www.facebook.com/dialog/share?app_id=${this.props.facebookAppId}&href=${encodeURIComponent(postLink)}&redirect_uri${encodeURIComponent(postLink)}`,
       email: `mailto:?subject=${description}&body=${encodeURIComponent(postLink)}`,
       whatsapp: `whatsapp://send?text=${encodeURIComponent(`${description} ${postLink}`)}`,
     });
@@ -88,6 +92,7 @@ class EntryShare extends Component {
 
 EntryShare.propTypes = {
   entry: PropTypes.object,
+  facebookAppId: PropTypes.string,
 };
 
 export default EntryShare;
