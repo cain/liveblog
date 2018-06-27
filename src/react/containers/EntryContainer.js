@@ -6,8 +6,8 @@ import { connect } from 'react-redux';
 import * as apiActions from '../actions/apiActions';
 import * as userActions from '../actions/userActions';
 import { triggerOembedLoad, formattedTime, timestampLogic } from '../utils/utils';
-import EditorContainer from '../containers/EditorContainer';
 import EntryShare from '../components/EntryShare';
+import Editor from '../components/Editor';
 
 class EntryContainer extends Component {
   constructor(props) {
@@ -114,7 +114,7 @@ class EntryContainer extends Component {
             this.isEditing()
               ? (
                 <div className="liveblog-entry-edit">
-                  <EditorContainer entry={entry} isEditing={true} />
+                  <Editor entry={entry} isEditing={true} />
                 </div>
               )
               : (

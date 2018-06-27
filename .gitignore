@@ -1,6 +1,10 @@
 .DS_Store
 node_modules/
 assets/app.min.js
+assets/*.bundle.min.js
+assets/vendor.min.js
+assets/*.bundle.min.js.map
+assets/vendor.min.js.map
 assets/app.min.js.map
 assets/amp.min.js
 assets/amp.min.js.map
