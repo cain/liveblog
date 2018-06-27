@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const paths = {
   entry: './src/react/index.js',
@@ -15,11 +16,13 @@ const webpackConfig = {
   entry: {
     app: path.join(__dirname, paths.entry),
     amp: path.join(__dirname, './src/react/amp.js'),
+    vendor: ['react', 'moment', 'redux', 'react-dom'],
   },
 
   output: {
     path: path.join(__dirname, paths.out),
     filename: '[name].min.js',
+    chunkFilename: '[name].bundle.min.js',
   },
 
   module: {
@@ -52,7 +55,7 @@ const webpackConfig = {
               options: {
                 sourceMap: false,
                 minimize: true,
-              }
+              },
             },
             {
               loader: 'postcss-loader',
@@ -71,8 +74,8 @@ const webpackConfig = {
               loader: 'sass-loader',
               options: {
                 sourceMap: false,
-              }
-            }
+              },
+            },
           ],
         }),
       },
@@ -99,6 +102,11 @@ const webpackConfig = {
       __PROD__: JSON.stringify(process.env.NODE_ENV === 'production'),
       __TEST__: JSON.stringify(process.env.NODE_ENV === 'test'),
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+    }),
+    // new BundleAnalyzerPlugin(),
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
     }),
   ],
 };
