@@ -35,7 +35,7 @@ class AppContainer extends Component {
     return (
       <div style={{ position: 'relative' }}>
         {(page === 1 || paginationTypeLoadMore) && canEdit && <Editor isEditing={false} />}
-        <h2 className="liveblog-feed-title">Live Updates</h2>
+        <h2 className="liveblog-feed-title">{config.state === 'enable' ? 'Live Updates' : 'Updates'}</h2>
         <UpdateButton polling={polling} click={() => mergePolling()} />
         {!paginationTypeLoadMore && <PaginationContainer /> }
         <Entries loading={loading} entries={entries} />
