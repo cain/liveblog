@@ -15,7 +15,6 @@ const webpackConfig = {
   entry: {
     app: path.join(__dirname, paths.entry),
     amp: path.join(__dirname, './src/react/amp.js'),
-    vendor: ['react', 'moment', 'redux', 'react-dom'],
   },
 
   output: {
