@@ -73,6 +73,11 @@ export const eventsApplyUpdate = (currentEntries, newEntries) =>
 
     if (Object.prototype.hasOwnProperty.call(accumulator, id)) {
       accumulator[id] = entry;
+    } else if (entry.type === 'update' && entry.key_event) {
+      accumulator = {
+        [id]: entry,
+        ...accumulator,
+      };
     }
 
     if (!entry.key_event || entry.type === 'delete') {
