@@ -20,10 +20,11 @@ class EventsContainer extends Component {
   }
 
   parseEvents(events) {
+    const sort = events.sort((x, y) => y.entry_time - x.entry_time);
     if (this.state.expand) {
-      return events;
+      return sort;
     }
-    return events.slice(0, this.props.highlightsCount || 3);
+    return sort.slice(0, this.props.highlightsCount || 3);
   }
 
   toggleExpand() {
