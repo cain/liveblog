@@ -17,6 +17,9 @@ export const api = (state = initialState, action) => {
     case 'JUMP_TO_EVENT':
     case 'GET_ENTRIES':
     case 'GET_ENTRIES_PAGINATED':
+    case 'CREATE_ENTRY':
+    case 'UPDATE_ENTRY':
+    case 'DELETE_ENTRY':
       return {
         ...state,
         error: false,
@@ -68,12 +71,14 @@ export const api = (state = initialState, action) => {
         ...state,
         error: false,
         nonce: action.payload.nonce,
+        loading: false,
       };
 
     case 'CREATE_ENTRY_FAILED':
       return {
         ...state,
         error: true,
+        loading: false,
       };
 
     case 'DELETE_ENTRY_SUCCESS':
@@ -81,12 +86,14 @@ export const api = (state = initialState, action) => {
         ...state,
         error: false,
         nonce: action.payload.nonce,
+        loading: false,
       };
 
     case 'DELETE_ENTRY_FAILED':
       return {
         ...state,
         error: true,
+        loading: false,
       };
 
     case 'UPDATE_ENTRY_SUCCESS':
@@ -94,12 +101,14 @@ export const api = (state = initialState, action) => {
         ...state,
         error: false,
         nonce: action.payload.nonce,
+        loading: false,
       };
 
     case 'UPDATE_ENTRY_FAILED':
       return {
         ...state,
         error: true,
+        loading: false,
       };
 
     case 'MERGE_POLLING_INTO_ENTRIES':
