@@ -29,7 +29,10 @@ export default contentState =>
         }
 
         if (type === 'media') {
-          return <img src={entity.getData().image} />;
+          const ratio = Math.round((entity.getData().height / entity.getData().width) * 100) / 100;
+          const padding = `calc(${ratio}*100%)`;
+          return <figure style={{ margin: 0, paddingBottom: padding, position: 'relative' }}>
+            <img style={{ position: 'absolute', width: '100%', height: '100%' }} src={entity.getData().image} /></figure>;
         }
       }
       if (block.type === 'unordered-list-item') {

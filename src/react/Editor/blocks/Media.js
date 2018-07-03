@@ -167,8 +167,8 @@ class Media extends Component {
     setEditMode(false);
 
     // Upload image to server and render in the block.
-    handleImageUpload(files[0]).then((src) => {
-      replaceMetadata({ image: src });
+    handleImageUpload(files[0]).then((image) => {
+      replaceMetadata({ width: image.width, height: image.height, image: image.src });
       this.setState({ uploading: false });
     });
 

@@ -244,7 +244,7 @@ class EditorContainer extends Component {
         .map(res => res.response)
         .subscribe((res) => {
           const src = getImageSize(res.data, config.default_image_size);
-          resolve(src);
+          resolve({ width: res.data.width, height: res.data.height, src });
         });
     });
   }
