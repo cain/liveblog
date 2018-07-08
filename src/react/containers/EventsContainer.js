@@ -32,7 +32,7 @@ class EventsContainer extends Component {
   }
 
   renderEvents() {
-    const { deleteEvent, jumpToEvent, canEdit, utcOffset, dateFormat } = this.props;
+    const { deleteEvent, jumpToEvent, canEdit, utcOffset, dateFormat, loading } = this.props;
     const { expand } = this.state;
 
     const events =
@@ -52,7 +52,7 @@ class EventsContainer extends Component {
     }
 
     return (
-      <div>
+      <div className={loading ? 'is-loading' : ''}>
         <h2 className="widget-title">Highlights</h2>
         <ul className="liveblog-events">
           {this.parseEvents(events).map((event, i) =>
@@ -116,6 +116,7 @@ EventsContainer.propTypes = {
   utcOffset: PropTypes.string,
   dateFormat: PropTypes.string,
   highlightsCount: PropTypes.string,
+  loading: PropTypes.bool,
 };
 
 const mapStateToProps = state => ({
@@ -124,6 +125,7 @@ const mapStateToProps = state => ({
   events: state.events.entries,
   canEdit: state.config.is_liveblog_editable === '1',
   highlightsCount: state.config.highlightsCount,
+  loading: state.api.loading,
 });
 
 const mapDispatchToProps = dispatch =>
