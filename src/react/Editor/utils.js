@@ -145,7 +145,7 @@ export const getImageSize = ({ sizes, url }, defaultSize) => {
     return sizes[defaultSize].source_url || sizes[defaultSize].url;
   }
   if (url) {
-      return url;
+    return url;
   }
   if (sizes.full) {
     return sizes.full.source_url || sizes.full.url;
