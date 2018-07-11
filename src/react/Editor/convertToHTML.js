@@ -29,7 +29,22 @@ export default contentState =>
         }
 
         if (type === 'media') {
-          return <img src={entity.getData().image} />;
+          const imgWidth = entity.getData().width;
+          const imgHeight = entity.getData().height;
+          const ratio = Math.round((imgHeight / imgWidth) * 100) / 100;
+          const padding = `calc(${ratio}*100%)`;
+          let figureStyle = '';
+          let imgStyle = '';
+          if (imgWidth > 317) {
+            figureStyle = { margin: 0, paddingBottom: padding, position: 'relative' };
+            imgStyle = { position: 'absolute', width: '100%', height: '100%' };
+          } else {
+            figureStyle = { margin: 0, padding: 0, height: imgHeight, textAlign: 'center' };
+            imgStyle = { width: imgWidth, height: imgHeight };
+          }
+          const imgTag = <figure style={figureStyle}>
+            <img style={imgStyle} src={entity.getData().image} /></figure>;
+          return imgTag;
         }
       }
       if (block.type === 'unordered-list-item') {
