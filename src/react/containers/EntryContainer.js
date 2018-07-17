@@ -17,8 +17,14 @@ class EntryContainer extends Component {
       const { user, entry } = this.props;
       return user.entries[entry.id] && user.entries[entry.id].isEditing;
     };
-    this.edit = () => this.props.entryEditOpen(this.props.entry.id);
-    this.close = () => this.props.entryEditClose(this.props.entry.id);
+    this.edit = () => {
+      this.props.entryEditOpen(this.props.entry.id);
+      this.scrollIntoView();
+    };
+    this.close = () => {
+      this.props.entryEditClose(this.props.entry.id);
+      this.scrollIntoView();
+    };
     this.delete = () => {
       /* eslint no-alert: 0 */
       if (window.confirm('Are you sure you want to delete this entry?')) {
@@ -38,9 +44,23 @@ class EntryContainer extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { activateScrolling } = this.props.entry;
+    const { entry } = this.props;
+    const { activateScrolling } = entry;
+    const prevUserEntry = prevProps.user.entries[entry.id];
     if (activateScrolling && activateScrolling !== prevProps.entry.activateScrolling) {
       this.scrollIntoView();
+    }
+
+    // If entry is different OR editing was closed
+    if (
+      (entry.render !== prevProps.entry.render) ||
+      (
+        prevUserEntry &&
+        prevUserEntry.isEditing === true &&
+        this.isEditing() === false
+      )
+    ) {
+      triggerOembedLoad(this.node);
     }
   }
 
