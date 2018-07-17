@@ -122,9 +122,9 @@ add_action(
 /**
  * Clear the feed cache when a Liveblog entry is updated
  */
-add_action( 'liveblog_insert_entry', 'wpcom_invalidate_feed_cache' );
-add_action( 'liveblog_update_entry', 'wpcom_invalidate_feed_cache' );
-add_action( 'liveblog_delete_entry', 'wpcom_invalidate_feed_cache' );
+//add_action( 'liveblog_insert_entry', 'wpcom_invalidate_feed_cache' );
+//add_action( 'liveblog_update_entry', 'wpcom_invalidate_feed_cache' );
+//add_action( 'liveblog_delete_entry', 'wpcom_invalidate_feed_cache' );
 
 // Don't show the post box for blogs the current user isn't a member of.
 // Helps protect against any accidents by superadmins.
