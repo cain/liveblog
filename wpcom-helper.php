@@ -120,11 +120,20 @@ add_action(
 );
 
 /**
+ * Delete the liveblog cache
+ * @param $comment_id
+ * @param $post_id
+ */
+function newscorpau_invalidate_feed_cache( $comment_id, $post_id ) {
+	wp_cache_delete( 'liveblog_entries_asc_' . $post_id, 'liveblog' );
+}
+
+/**
  * Clear the feed cache when a Liveblog entry is updated
  */
-//add_action( 'liveblog_insert_entry', 'wpcom_invalidate_feed_cache' );
-//add_action( 'liveblog_update_entry', 'wpcom_invalidate_feed_cache' );
-//add_action( 'liveblog_delete_entry', 'wpcom_invalidate_feed_cache' );
+add_action( 'liveblog_insert_entry', 'newscorpau_invalidate_feed_cache', 10, 2 );
+add_action( 'liveblog_update_entry', 'newscorpau_invalidate_feed_cache', 10, 2 );
+add_action( 'liveblog_delete_entry', 'newscorpau_invalidate_feed_cache', 10, 2 );
 
 // Don't show the post box for blogs the current user isn't a member of.
 // Helps protect against any accidents by superadmins.
