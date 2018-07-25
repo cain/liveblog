@@ -137,15 +137,15 @@ export const focusableBlockIsSelected = (editorState) => {
 /**
  * Get the most suitable image size.
  * @param {object} image
- * @param {string} selectedSize
+ * @param {string} defaultSize
  */
 export const getImageSize = ({ sizes, url }, defaultSize) => {
   if (!sizes) return '';
-  if (url) {
-    return url;
-  }
   if (sizes[defaultSize]) {
     return sizes[defaultSize].source_url || sizes[defaultSize].url;
+  }
+  if (url) {
+    return url;
   }
   if (sizes.full) {
     return sizes.full.source_url || sizes.full.url;
