@@ -494,6 +494,9 @@ class WPCOM_Liveblog_Rest_Api {
 	 */
 	public static function get_authors( WP_REST_Request $request ) {
 
+		if ( false === is_user_logged_in() ) {
+			return [];
+		}
 		// Get required parameters from the request
 		$term = $request->get_param( 'term' );
 
