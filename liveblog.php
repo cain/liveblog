@@ -1012,7 +1012,7 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 			}
 
 			wp_enqueue_style( self::KEY, plugins_url( 'assets/app.css', __FILE__ ) );
-			wp_enqueue_style( self::KEY . '_theme', plugins_url( 'assets/theme.css', __FILE__ ) );
+			// wp_enqueue_style( self::KEY . '_theme', plugins_url( 'assets/theme.css', __FILE__ ) );
 
 			// Load Client Scripts
 			wp_enqueue_script( self::KEY, plugins_url( 'assets/app.min.js', __FILE__ ), array(), self::VERSION, true );
