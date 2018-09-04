@@ -1,20 +1,48 @@
-<div id="liveblog-entry-<?php echo esc_attr( $entry_id ); ?>" class="<?php echo esc_attr( $css_classes ); ?>" data-timestamp="<?php echo esc_attr( $timestamp ); ?>">
-	<header class="liveblog-meta">
-		<span class="liveblog-author-avatar"><?php echo wp_kses_post( $avatar_img ); ?></span>
-		<span class="liveblog-author-name"><?php echo wp_kses_post( $author_link ); ?></span>
-		<span class="liveblog-meta-time"><a href="#liveblog-entry-<?php echo absint( $entry_id ); ?>" class="liveblog-time-update"><span class="date"><?php echo esc_html( $entry_date ); ?></span><span class="time"><?php echo esc_html( $entry_time ); ?></span></a></span>
-	</header>
-	<?php if ( $headline ) { ?>
-		<h2 class="liveblog-entry-header">
-			<?php echo wp_kses_post( $headline ); ?>
-		</h2>
-	<?php } ?>
-	<div class="liveblog-entry-text" data-original-content="<?php echo esc_attr( $original_content ); ?>">
-		<?php echo wp_kses_post( $content ); ?>
+<?php
+/**
+ * @var $entry
+ * @var $time_format
+ * @var $date_format
+ */
+?>
+<?php $entry_timestamp = \DateTime::createFromFormat( 'U', $entry->entry_time ); ?>
+<article
+	id="id_<?php echo esc_html( $entry->id ); ?>"
+	class="liveblog-entry <?php echo true === $entry->key_event ? 'is-key-event' : ''; ?>"
+>
+	<aside class="liveblog-entry-aside">
+		<a class="liveblog-meta-time" href="<?php echo esc_url( $entry->share_link ) ?>">
+			<span><?php echo $entry_timestamp->format( $time_format ); ?></span>
+			<span><?php echo $entry_timestamp->format( $date_format ); ?></span>
+		</a>
+		<?php if ( $entry->key_event ) : ?>
+			<span class="liveblog-label-highlight">Highlight</span>
+		<?php endif; ?>
+	</aside>
+	<div class="liveblog-entry-main">
+		<header class="liveblog-meta">
+			<?php if ( $entry->headline ) : ?>
+				<h2 class="liveblog-entry-header">
+					<?php echo esc_html( $entry->headline ); ?>
+				</h2>
+			<?php endif; ?>
+			<?php if ( $entry->authors ): ?>
+				<div class="liveblog-meta-authors">
+					<?php foreach($entry->authors as $author ) : ?>
+						<?php if( $author['avatar'] ) : ?>
+							<div class="liveblog-meta-author-avatar" >
+								<?php echo wp_kses_post( $author['avatar'] ); ?>
+							</div>
+						<?php endif; ?>
+						<span class="liveblog-meta-author-name">
+							<?php echo esc_html( $author['name'] ); ?>
+						</span>
+					<?php endforeach; ?>
+				</div>
+			<?php endif ?>
+		</header>
 	</div>
-<?php if ( $is_liveblog_editable ) : ?>
-	<ul class="liveblog-entry-actions">
-		<li><button class="liveblog-entry-edit button-secondary"><?php esc_html_e( 'Edit', 'liveblog' ); ?></button><button class="liveblog-entry-delete button-secondary"><?php esc_html_e( 'Delete', 'liveblog' ); ?></button></li>
-	</ul>
-<?php endif; ?>
-</div>
+	<div class="liveblog-entry-content">
+		<?php echo wp_kses_post( $entry->render ); ?>
+	</div>
+</article>

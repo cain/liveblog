@@ -193,6 +193,28 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 			// We need to check the Liveblog autoarchive date on each time a new entry is added or updated to
 			// ensure we extend the date out correctly to the next archive point based on the configured offset.
 			add_filter( 'liveblog_before_insert_entry', array( __CLASS__, 'update_autoarchive_expiry' ), 10, 1 );
+
+			/**
+			 * Filter function added to display initial page of entries on page load for SEO benefit
+			 */
+			add_filter( 'liveblog_add_to_content', array( __CLASS__, 'add_initial_entries_on_page_render' ), 10, 3 );
+		}
+
+		public static function add_initial_entries_on_page_render( $output, $content, $post_id ) {
+			$entries = self::get_entries_paged( 1 );
+			$liveblog_feed_title = self::get_liveblog_state( $post_id ) === 'enable' ? 'Live Updates' : 'Updates';
+			/**
+			 * Default time and date formats used by liveblog plugin are stored in the options table
+			 */
+			$time_format = get_option( 'time_format' );
+			$date_format = get_option( 'date_format' );
+			return self::get_template_part( 'liveblog-list.php', [
+				'entries' 				=> $entries,
+				'post_id' 				=> $post_id,
+				'liveblog_feed_title' 	=> $liveblog_feed_title,
+				'time_format' 			=> $time_format,
+				'date_format' 			=> $date_format,
+			] );
 		}
 
 		/**
