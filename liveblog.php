@@ -879,6 +879,8 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 			$entries = array_slice( $entries, $offset, $number_of_entries );
 			$entries = self::entries_for_json( $entries );
 
+			$entries = apply_filters( 'filter_liveblog_json_entries', $entries, $page );
+
 			$result = array(
 				'entries' => $entries,
 				'page'    => (int) $page,
