@@ -1,19 +1,17 @@
 <?php
 /**
  * @var $entry
- * @var $time_format
- * @var $date_format
  */
+$entry_timestamp = \DateTime::createFromFormat( 'U', $entry->entry_time );
 ?>
-<?php $entry_timestamp = \DateTime::createFromFormat( 'U', $entry->entry_time ); ?>
 <article
 	id="id_<?php echo esc_html( $entry->id ); ?>"
 	class="liveblog-entry <?php echo true === $entry->key_event ? 'is-key-event' : ''; ?>"
 >
 	<aside class="liveblog-entry-aside">
 		<a class="liveblog-meta-time" href="<?php echo esc_url( $entry->share_link ) ?>">
-			<span><?php echo $entry_timestamp->format( $time_format ); ?></span>
-			<span><?php echo $entry_timestamp->format( $date_format ); ?></span>
+			<span><?php echo esc_html( apply_filters( 'liveblog_single_entry_displayed_timestamp', $entry_timestamp ) ); ?></span>
+			<span><?php echo esc_html( apply_filters( 'liveblog_single_entry_displayed_date', $entry_timestamp ) ); ?></span>
 		</a>
 		<?php if ( $entry->key_event ) : ?>
 			<span class="liveblog-label-highlight">Highlight</span>
