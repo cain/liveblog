@@ -198,22 +198,40 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 			 * Filter function added to display initial page of entries on page load for SEO benefit
 			 */
 			add_filter( 'liveblog_add_to_content', array( __CLASS__, 'add_initial_entries_on_page_render' ), 10, 3 );
+			/**
+			 * Filters to format the date and timestamp shown on initial page of entries
+			 */
+			add_filter( 'liveblog_single_entry_displayed_timestamp', array( __CLASS__, 'liveblog_single_entry_displayed_timestamp_render' ), 10, 1 );
+			add_filter( 'liveblog_single_entry_displayed_date', array( __CLASS__, 'liveblog_single_entry_displayed_date_render' ), 10, 1 );
+		}
+
+		/**
+		 * Formats the timestamp to be in the configured wordpress timezone with the configured wordpress time format
+		 * @param DateTime $entry_timestamp
+		 * @return string
+		 */
+		public static function liveblog_single_entry_displayed_timestamp_render( DateTime $entry_timestamp ) {
+			$time_format = get_option( 'time_format' );
+			return $entry_timestamp->setTimezone( new DateTimeZone( get_option( 'timezone_string' ) ) )->format( $time_format );
+		}
+
+		/**
+		 * Formats the date to be in the configured wordpress timezone with the configured wordpress date format
+		 * @param DateTime $entry_timestamp
+		 * @return string
+		 */
+		public static function liveblog_single_entry_displayed_date_render( DateTime $entry_timestamp ) {
+			$date_format = get_option( 'date_format' );
+			return $entry_timestamp->setTimezone( new DateTimeZone( get_option( 'timezone_string' ) ) )->format( $date_format );
 		}
 
 		public static function add_initial_entries_on_page_render( $output, $content, $post_id ) {
 			$entries = self::get_entries_paged( 1 );
 			$liveblog_feed_title = self::get_liveblog_state( $post_id ) === 'enable' ? 'Live Updates' : 'Updates';
-			/**
-			 * Default time and date formats used by liveblog plugin are stored in the options table
-			 */
-			$time_format = get_option( 'time_format' );
-			$date_format = get_option( 'date_format' );
 			return self::get_template_part( 'liveblog-list.php', [
 				'entries' 				=> $entries,
 				'post_id' 				=> $post_id,
 				'liveblog_feed_title' 	=> $liveblog_feed_title,
-				'time_format' 			=> $time_format,
-				'date_format' 			=> $date_format,
 			] );
 		}
 
